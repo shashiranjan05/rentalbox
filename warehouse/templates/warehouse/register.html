@@ -6,12 +6,23 @@
         <h2 class="text-muted">Register</h2>
         <form method="POST" action="{% url 'register' %}">
             {% csrf_token %}
+            
             <div class="form-group">
-                <label for="{{ form.username.id_for_label }}">
-                    Username:
+                <label for="{{ form.email.id_for_label }}">
+                    Enter Email ID:
                 </label>
-                <input type="text" name="{{ form.username.name }}" class="form-control" value="{{ form.username.value}}">
-                <span class="text-danger">{{ form.username.errors }}</span>
+                <input type="text" name="{{ form.email.name }}" class="form-control" value="{{ form.email.value}}">
+                <span class="text-danger">{{ form.email.errors }}</span>
+            </div>
+            <div class="form-group">
+                <label for="{{ form.role.id_for_label }}">
+                    Role:
+                </label>
+                <select name="{{ form.role.name }}"  value="{{ form.role.value}}" required>
+                    <option>CUSTOMER</option>
+                    <!-- <option>ADMIN</option> -->
+                </select><br> 
+                <span class="text-danger">{{ form.role.errors }}</span>
             </div>
             <div class="form-group">
                 <label for="{{ form.password1.id_for_label }}">

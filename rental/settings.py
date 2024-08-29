@@ -26,8 +26,9 @@ SECRET_KEY = 'django-insecure-tbevyg23%3sz$7d(@74alj#sab3n0e@^=1@nxz76m%lbc78nth
 DEBUG = True
 
 ALLOWED_HOSTS = []
-#AUTH_USER_MODEL = 'warehouse.User'
+# AUTH_USER_MODEL = 'warehouse.User'
 
+AUTH_USER_MODEL = 'warehouse.CustomUser'
 
 # Application definition
 

@@ -6,11 +6,13 @@ import datetime
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
 from django.contrib.auth import get_user_model
-from .forms import CustomerSignUpForm 
+# from .forms import CustomerSignUpForm 
 from django.views.generic import CreateView
+from .forms import  CustomUserCreationForm
+from django.conf import settings
 
+# User = settings.AUTH_USER_MODEL
 
 # Create your views here.
 def index(request):
@@ -50,7 +52,7 @@ def enquiry_view(request):
         org_details = request.POST.get("org_details")
         your_requirement = request.POST.get("your_requirement")
         print(request.user)
-        visit_info = EnquiryDetails(enquiry_id= enquiry_id,customer_name = customer_name, your_email = your_email, phone_number = phone_number,
+        visit_info = EnquiryDetails(user=request.user,enquiry_id= enquiry_id,customer_name = customer_name, your_email = your_email, phone_number = phone_number,
         org_details = org_details, your_requirement = your_requirement)
         visit_info.save()
        
@@ -84,19 +86,20 @@ def request_for_quote_view(request):
 
 def register_view(request):
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
-        #User = get_user_model()
+        print("in register part")
+        # form = UserCreationForm(request.POST)
+        form = CustomUserCreationForm(request.POST)
 
         if form.is_valid():
             user = form.save()
-            # is_customer=True   #for customer
-            # user_data=User(is_customer=is_customer)
-            # user_data.save()
             login(request,user)
+            print("in register part complete")
+
             return redirect('dashboard')
+
     else:
         intial_data = {'username':'','password1':'','password2':''}
-        form = UserCreationForm(initial=intial_data)
+        form = CustomUserCreationForm(initial=intial_data)
     return render(request, 'warehouse/register.html',{'form':form})
 
 
@@ -123,6 +126,7 @@ def register_view(request):
 
 def login_view(request):
     if request.method == 'POST':
+
         form = AuthenticationForm(request, data=request.POST)
         if form.is_valid():
             user = form.get_user()
@@ -142,8 +146,11 @@ def logout_view(request):
 def dashboard_view(request):
     data= request_for_quote_view(request)
     print("data=====", data)
+    print("user login name ---", request.user.email)
+    username= request.user.email
+    name = username.split('@')[0]
     sales_quote = SalesQuoteDetails.objects.all()
-    return render(request, 'dashboard.html',{'data':data,'sales_quote':sales_quote})
+    return render(request, 'dashboard.html',{'data':data,'sales_quote':sales_quote, 'name':name})
 
 
 
