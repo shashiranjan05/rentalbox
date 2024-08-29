@@ -1,0 +1,87 @@
+
+{% extends 'layout/app.html' %}
+{% load static %}
+
+{% block content %}
+<html>
+
+    <head>
+        <link rel = "stylesheet" type="text/css" href="{% static '/warehouse/css/sales_quote.css' %}">
+    </head>
+     <body>  
+        <div class="container">
+
+            <h3 style="background-color: green; color: aliceblue; margin-left: 38%; margin-right: 47%;">Sales Quote</h3>
+        <form action=""  method="GET">
+            {% csrf_token %}
+            <div class="wrap-input100 validate-input m-b-26" data-validate="Space type is required">
+                <div class="row">
+                    <div class="col-25">
+                <span class="label-input100">Enquiry ID:</span>
+            </div>
+            <div class="col-75">
+                {{ enquiry_id }}
+            </div>
+        </div>
+            </div>
+        </form>
+        <form action = "" method = "POST">
+            {% csrf_token %} 
+            <div class="row">
+                <div class="col-25">
+                    <label for="product_name">Enter Product name: </label>
+                </div>
+                <div class="col-75">
+            <input id="product_name" type="text" name="product_name"><br>  
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="col-25">
+                    <label for="product_id">Enter Product Id: </label>
+                </div>
+                <div class="col-75">
+                    <input id="product_id" type="text" name="product_id"><br> 
+                </div>
+             </div>
+            <div class="row">
+                <div class="col-25">
+            <label for="product_details">Enter Product Details: </label>
+            </div>
+            <div class="col-75">
+                <textarea id="product_details" style="height:100px" type="text" name="product_details"></textarea> <br> 
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-25">
+            <label for="time_period">Choose Time Period: </label>
+        </div>
+        <div class="col-75">
+            <select name="time_period" id="time_period" required>
+                <option>3 Months</option>
+                <option>6 Months</option>
+                <option>9 Months</option>
+                <option>1 Year</option>
+            </select><br> 
+        </div>
+    </div>
+        <div class="row">
+            <div class="col-25">
+                <label for="pricing">Pricing According Time Period: </label>
+            </div>
+            <div class="col-75">
+                <input id="pricing" type="text" name="pricing"><br> 
+            </div>
+        </div>
+    <br>
+        <div class="row">
+            <input type="submit" style="margin-left: 25%;" value="submit" name="submit">
+        </div>
+        </form>
+    </div>
+    </body> 
+</html>
+
+
+{% endblock %}
