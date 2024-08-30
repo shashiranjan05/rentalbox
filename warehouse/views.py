@@ -155,13 +155,19 @@ def logout_view(request):
 
 @login_required(login_url='/login/')
 def dashboard_view(request):
-    data= request_for_quote_view(request)
-    print("data=====", data)
-    print("user login name ---", request.user.email)
     username= request.user.email
     name = username.split('@')[0]
+    role=request.user.role
+
+    # for customer request 
+    if role == 'ADMIN':
+        data= EnquiryDetails.objects.all()
+    else:
+        data= request_for_quote_view(request)
+        
     sales_quote = SalesQuoteDetails.objects.all()
-    return render(request, 'dashboard.html',{'data':data,'sales_quote':sales_quote, 'name':name})
+    
+    return render(request, 'dashboard.html',{'data':data,'sales_quote':sales_quote, 'name':name,'role':role})
 
 
 
