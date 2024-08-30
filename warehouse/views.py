@@ -44,6 +44,8 @@ def create_order_id():
 
 @login_required(login_url='/login/')
 def enquiry_view(request):
+    username= request.user.email
+    name = username.split('@')[0]
     if request.method == 'POST':
         enquiry_id = create_order_id() 
         customer_name = request.POST.get("your_name")
@@ -58,9 +60,11 @@ def enquiry_view(request):
        
         # return HttpResponseRedirect(reverse('thank_you'))
         print("enquire form details saved in database  .....")
-    return render(request, 'warehouse/enquiry.html')
+    return render(request, 'warehouse/enquiry.html',{'name':name})
 
 def sales_quote_view(request):
+    username= request.user.email
+    name = username.split('@')[0]
     all_data = EnquiryDetails.objects.get(id=1)
     enquiry_id= all_data.enquiry_id
     if request.method == 'POST':
@@ -76,7 +80,7 @@ def sales_quote_view(request):
        
         # return HttpResponseRedirect(reverse('thank_you'))
         print("sales form details saved in database  .....")
-    return render(request, 'warehouse/sales_quote.html',{'enquiry_id':enquiry_id})
+    return render(request, 'warehouse/sales_quote.html',{'enquiry_id':enquiry_id, 'name':name})
 
 def request_for_quote_view(request):
     data = EnquiryDetails.objects.filter(user=request.user)
