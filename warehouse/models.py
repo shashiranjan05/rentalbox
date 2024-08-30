@@ -46,6 +46,8 @@ class EnquiryDetails(models.Model):
     org_details = models.CharField(max_length=64, null= True)
     your_requirement = models.CharField(max_length=64, null = True)
 
+    
+
 CATEGORY_CHOICES = (
     ('3 Months', '3 Months'),
     ('6 Months', '6 Months'),

@@ -19,19 +19,26 @@
             <h3 style="background-color: green; color: aliceblue; margin-left: 38%; margin-right: 47%;">Sales Quote</h3>
         <form action=""  method="GET">
             {% csrf_token %}
+            
+        </form>
+        <form action = "" method = "POST">
+            {% csrf_token %} 
             <div class="wrap-input100 validate-input m-b-26" data-validate="Space type is required">
                 <div class="row">
                     <div class="col-25">
                 <span class="label-input100">Enquiry ID:</span>
             </div>
             <div class="col-75">
-                {{ enquiry_id }}
+                <select id="enquiry_id", name="enquiry_id" >
+                    {% for val in all_data %}
+                    <option id="enquiry_id", name="enquiry_id" >
+                            {{val.enquiry_id}}
+                    </option>
+                    {% endfor %}
+                </select>
             </div>
         </div>
             </div>
-        </form>
-        <form action = "" method = "POST">
-            {% csrf_token %} 
             <div class="row">
                 <div class="col-25">
                     <label for="product_name">Enter Product name: </label>

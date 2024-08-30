@@ -40,6 +40,7 @@
                 <h4>Sales Quote</h4>
                     <tr>
                         <tr>
+                            <th>Enquiry Id</th>
                             <th>Product Id</th>
                             <th>Product Name</th>
                             <th>Product Details</th>
@@ -50,6 +51,7 @@
                         <tr>
                             {% for products in sales_quote %}
                             {% if products.enquiry.enquiry_id == val.enquiry_id %}
+                            <td>{{ val.enquiry_id }}</td>
                             <td>{{ products.product_id }}</td>
                             <td>{{ products.product_name }}</td>
                             <td>{{ products.product_details }}</td>

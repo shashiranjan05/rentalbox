@@ -65,10 +65,17 @@ def enquiry_view(request):
 def sales_quote_view(request):
     username= request.user.email
     name = username.split('@')[0]
-    all_data = EnquiryDetails.objects.get(id=1)
-    enquiry_id= all_data.enquiry_id
+    all_data = EnquiryDetails.objects.all()
+    list_enquiry_id=[]
+    # for val in all_data:
+    #     list_enquiry_id.append(val.enquiry_id)
+    
+    # enquiry_id= all_data.enquiry_id
     if request.method == 'POST':
-        enquiry = all_data
+        # enquiry = all_data
+        enquiry_id = request.POST.get("enquiry_id")
+        print("enquiry_id---- ", enquiry_id)
+        enquiry=EnquiryDetails.objects.get(enquiry_id=enquiry_id)
         product_name = request.POST.get("product_name")
         product_id = request.POST.get("product_id")
         product_details = request.POST.get("product_details")
@@ -80,7 +87,7 @@ def sales_quote_view(request):
        
         # return HttpResponseRedirect(reverse('thank_you'))
         print("sales form details saved in database  .....")
-    return render(request, 'warehouse/sales_quote.html',{'enquiry_id':enquiry_id, 'name':name})
+    return render(request, 'warehouse/sales_quote.html',{'all_data':all_data, 'name':name})
 
 def request_for_quote_view(request):
     data = EnquiryDetails.objects.filter(user=request.user)
