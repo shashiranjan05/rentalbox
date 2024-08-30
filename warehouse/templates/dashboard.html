@@ -7,15 +7,23 @@
             <link rel = "stylesheet" type="text/css" href="{% static '/warehouse/css/dashboard.css' %}">
         </head>
         <body>
+        
+
+        
              <!-- header start -->
         <div class="header" style=" background-color: rgb(26, 183, 97); text-align: center; left: 0%; width: 100%; ">
             <p><span style="margin-right: 60%; color: aliceblue; font-weight: bold;">RentalBox</span> 
+                <span>
+                    <a href="{% url 'mycart' %}"><i class="fas fa-shopping-cart" style="color: aliceblue;"></i></a>
+                    
+                </span> &nbsp;
                 <span >Login by 
                     <span style="color: aliceblue; font-weight: bold;"> {{role}} </span>
                 </span>
                 <span> : {{ name }} <a href="{% url 'logout' %}" class="btn btn-dark">Logout</a></span></p>
         </div>
         <!-- header end -->
+        <div class="container">
          <h3 style="text-align: left;">Dashboard</h3>
             <table>
                 <h4>RFQ
@@ -40,7 +48,7 @@
                     {% endfor %}
                 </tr>
             </table>
-        </br>
+            </br>
             <table>
                 <h4>Sales Quote
                     {% if role == 'ADMIN' %}
@@ -72,13 +80,15 @@
                         {% endfor %}
 
                     </tr>
-              </table>
+            </table>
+        </div>
                <!-- footer start -->
         <div class="footer" style="background-color: rgb(26, 183, 97); text-align: center; left: 0%; width: 100%; bottom: 0%; position: fixed; ">
             <p>&copy shashiranjan<a href="https://www.linkedin.com/in/shashiranjan05/" ><i class="fa fa-linkedin-square" style="font-size:24px; color: black;"></i></a> &nbsp;<a href="https://github.com/shashiranjan05"><i class="fa fa-github-square" style="font-size:24px; color: black;" ></i></a>
             </p>
         </div>
         <!-- footer end -->
+
         </body>
     {% endblock %}
 </html>

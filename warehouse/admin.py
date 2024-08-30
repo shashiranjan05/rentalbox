@@ -4,7 +4,7 @@ from .forms import CustomUserCreationForm, CustomUserChangeForm
 from django.contrib.auth.admin import UserAdmin
 
 # Register your models here.
-from .models import EnquiryDetails, SalesQuoteDetails, CompleteDetails
+from .models import EnquiryDetails, SalesQuoteDetails, CompleteDetails, CartDetails
 
 
 class CustomUserAdmin(UserAdmin):
@@ -32,5 +32,6 @@ class CustomUserAdmin(UserAdmin):
 admin.site.register(EnquiryDetails)
 admin.site.register(SalesQuoteDetails)
 admin.site.register(CompleteDetails)
+admin.site.register(CartDetails)
 
 admin.site.register(CustomUser, CustomUserAdmin)

@@ -41,7 +41,7 @@ def create_order_id():
 
     return current_order_id
 
-
+#generate enquiry or RFQ
 @login_required(login_url='/login/')
 def enquiry_view(request):
     username= request.user.email
@@ -63,19 +63,17 @@ def enquiry_view(request):
         print("enquire form details saved in database  .....")
     return render(request, 'warehouse/enquiry.html',{'name':name, 'role':role})
 
+# generate sales quote
 def sales_quote_view(request):
     username= request.user.email
     name = username.split('@')[0]
     role=request.user.role
     all_data = EnquiryDetails.objects.all()
-    list_enquiry_id=[]
-    # for val in all_data:
-    #     list_enquiry_id.append(val.enquiry_id)
-    
-    # enquiry_id= all_data.enquiry_id
+    sales_quote_id = create_order_id() 
     if request.method == 'POST':
         # enquiry = all_data
         enquiry_id = request.POST.get("enquiry_id")
+        sales_quote_id = request.POST.get("sales_quote_id")
         print("enquiry_id---- ", enquiry_id)
         enquiry=EnquiryDetails.objects.get(enquiry_id=enquiry_id)
         product_name = request.POST.get("product_name")
@@ -83,8 +81,9 @@ def sales_quote_view(request):
         product_details = request.POST.get("product_details")
         time_period = request.POST.get("time_period")
         pricing= request.POST.get("pricing")
+        qty= request.POST.get("qty")
         sales_info = SalesQuoteDetails(enquiry= enquiry,product_name = product_name, product_id = product_id,
-        product_details = product_details, time_period = time_period, pricing=pricing)
+        product_details = product_details, time_period = time_period, pricing=pricing, qty=qty,sales_quote_id=sales_quote_id)
         sales_info.save()
        
         # return HttpResponseRedirect(reverse('thank_you'))
@@ -94,6 +93,16 @@ def sales_quote_view(request):
 def request_for_quote_view(request):
     data = EnquiryDetails.objects.filter(user=request.user)
     return data
+
+#cart details added 
+def cart_details_view(request):
+
+    username= request.user.email
+    name = username.split('@')[0]
+    role=request.user.role
+    cart_details = CartDetails.objects.filter(user=request.user)
+    print("cart details ----- ", cart_details)
+    return render(request,'warehouse/mycart.html',{'cart_details':cart_details, 'name':name, 'role':role})
 
 ### authentication views 
 
