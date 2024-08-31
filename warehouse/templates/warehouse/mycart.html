@@ -30,24 +30,29 @@
                             <th>Quantity</th>
                             <th>Time Period</th>
                             <th>Pricing Per Month</th>
-                        </tr>
-                        
-                        <tr>
+                            <th>Amount</th>
+                        </tr>                        
                             {% for details in cart_details %}
-                            
+                        <tr>
                             <td>{{ details.sq_details.product_name }}</td>
                             <td>{{ details.sq_details.product_details }}</td>
 
                             <td>{{ details.sq_details.qty }}</td>
                             <td>{{ details.sq_details.time_period }}</td>
                             <td>{{ details.sq_details.pricing }}</td>
-
-                            {% endfor %}
+                            <td>{{details.total_amount}}</td>
                         </tr>
-                        
-
+                            {% endfor %}
                     </tr>
+                    
             </table>
+            <div style="margin-left: 40%;">
+                <tr><td><b>Total Amount:</b></td>&nbsp;--- <td>{{total_amount}}</td></tr>
+            </div>
+            <button style="margin-left: 40%;">
+                <a href="" style="text-decoration: none; color: rgb(10, 109, 41);">Proceed To Payment</a>
+            </button>
+            
         </div>
                <!-- footer start -->
         <div class="footer" style="background-color: rgb(26, 183, 97); text-align: center; left: 0%; width: 100%; bottom: 0%; position: fixed; ">

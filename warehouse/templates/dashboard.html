@@ -63,10 +63,13 @@
                             <th>Product Details</th>
                             <th>Time Period</th>
                             <th> Product Pricing</th>
+                            <th><h4>Actions</h4></th>
+                            
                         </tr>
                         {% for val in data %}
-                        <tr>
+                        
                             {% for products in sales_quote %}
+                            <tr>
                             {% if products.enquiry.enquiry_id == val.enquiry_id %}
                             <td>{{ val.enquiry_id }}</td>
                             <td>{{ products.product_id }}</td>
@@ -74,9 +77,18 @@
                             <td>{{ products.product_details }}</td>
                             <td>{{ products.time_period }}</td>
                             <td>{{ products.pricing }}</td>
+                            
+                            <td>
+                                <button>
+                                    <a href="{% url 'add_to_cart' id=products.sales_quote_id %}" style="text-decoration: none; color: rgb(10, 109, 41);">Add To Cart</a>
+                                </button>
+                                
+                                <button><a href="{% url 'reject_sales_quote' id=products.sales_quote_id %}" style="text-decoration: none; color: red;"> Reject</a></button>
+                            </td>
                             {% endif %}
-                            {% endfor %}
                         </tr>
+                            {% endfor %}
+                       
                         {% endfor %}
 
                     </tr>

@@ -73,7 +73,7 @@ def sales_quote_view(request):
     if request.method == 'POST':
         # enquiry = all_data
         enquiry_id = request.POST.get("enquiry_id")
-        sales_quote_id = request.POST.get("sales_quote_id")
+        # sales_quote_id = request.POST.get("sales_quote_id")
         print("enquiry_id---- ", enquiry_id)
         enquiry=EnquiryDetails.objects.get(enquiry_id=enquiry_id)
         product_name = request.POST.get("product_name")
@@ -100,9 +100,47 @@ def cart_details_view(request):
     username= request.user.email
     name = username.split('@')[0]
     role=request.user.role
+    amount=[]
     cart_details = CartDetails.objects.filter(user=request.user)
-    print("cart details ----- ", cart_details)
-    return render(request,'warehouse/mycart.html',{'cart_details':cart_details, 'name':name, 'role':role})
+    for single_product in cart_details:
+        amount.append(single_product.total_amount)
+    total_amount=sum(amount)
+
+    print("cart details ----    - ", cart_details)
+    print("total amount ", total_amount, type(total_amount))
+    return render(request,'warehouse/mycart.html',{'cart_details':cart_details, 'name':name, 'role':role,'total_amount':total_amount})
+
+def add_to_cart_view(request,id):
+    user= request.user
+    sales_quote= SalesQuoteDetails.objects.filter(sales_quote_id=id, added_to_cart=False, sq_reject=False)
+    print("sales quote add to cart====", sales_quote)
+    enquiry=sales_quote[0].enquiry
+    pricing = sales_quote[0].pricing
+    qty=sales_quote[0].qty
+    time_period= sales_quote[0].time_period
+    timeing=int(time_period.split(' ')[0])
+    if time_period=='1 Year':
+        total_amount = int(qty)*int(pricing)*12
+    else:
+        total_amount = int(qty)*int(pricing)*int(timeing)
+    data = CartDetails(user=user,enquiry=enquiry, sq_details=sales_quote[0],pricing=pricing,qty=qty,time_period=time_period,total_amount=total_amount)
+    data.save()
+    if sales_quote.exists():
+        squote=sales_quote[0]
+        squote.added_to_cart =True
+        squote.save()
+    return redirect('dashboard')
+
+def reject_sales_quote_view(request,id):
+    sales_quote= SalesQuoteDetails.objects.filter(sales_quote_id=id, added_to_cart=False,sq_reject=False)
+    print("sales quote-----", sales_quote)
+    if sales_quote.exists():
+        squote=sales_quote[0]
+        squote.sq_reject =True
+        squote.save()
+    return redirect('dashboard')
+
+
 
 ### authentication views 
 
@@ -176,7 +214,7 @@ def dashboard_view(request):
     else:
         data= request_for_quote_view(request)
         
-    sales_quote = SalesQuoteDetails.objects.all()
+    sales_quote = SalesQuoteDetails.objects.filter(added_to_cart=False, sq_reject=False)
     
     return render(request, 'dashboard.html',{'data':data,'sales_quote':sales_quote, 'name':name,'role':role})
 

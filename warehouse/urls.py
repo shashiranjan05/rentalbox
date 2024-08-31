@@ -1,4 +1,4 @@
-from . import views
+from warehouse import views
 from django.urls import path
 
 urlpatterns = [
@@ -8,5 +8,8 @@ urlpatterns = [
     path('login/',views.login_view, name='login'),
     path('logout/',views.logout_view, name='logout'),
     path('dashboard/',views.dashboard_view, name='dashboard'),
-    path('mycart/',views.cart_details_view, name='mycart')
+    path('mycart/',views.cart_details_view, name='mycart'),
+    path('addtocart/<int:id>',views.add_to_cart_view,name='add_to_cart'),
+    path('sqreject/<int:id>/', views.reject_sales_quote_view, name='reject_sales_quote')
+
 ]
