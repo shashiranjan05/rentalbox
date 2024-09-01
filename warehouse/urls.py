@@ -10,6 +10,7 @@ urlpatterns = [
     path('dashboard/',views.dashboard_view, name='dashboard'),
     path('mycart/',views.cart_details_view, name='mycart'),
     path('addtocart/<int:id>',views.add_to_cart_view,name='add_to_cart'),
-    path('sqreject/<int:id>/', views.reject_sales_quote_view, name='reject_sales_quote')
-
+    path('create_order/',views.create_order,name='create_order'),
+    path('sqreject/<int:id>/', views.reject_sales_quote_view, name='reject_sales_quote'),
+    path('success/', views.success, name='success')
 ]

@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invoice</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 20px auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+        .total {
+            font-weight: bold;
+            text-align: right;
+            padding: 10px;
+        }
+        tfoot tr {
+            background-color: #f9f9f9;
+        }
+        @media (max-width: 768px) {
+            table {
+                border: 0;
+            }
+            thead {
+                display: none;
+            }
+            tr {
+                display: block;
+                margin-bottom: 10px;
+            }
+            td {
+                display: block;
+                text-align: right;
+                position: relative;
+                padding-left: 50%;
+                border-bottom: 1px solid #ddd;
+                white-space: nowrap;
+            }
+            td::before {
+                content: attr(data-label);
+                position: absolute;
+                left: 0;
+                width: 45%;
+                padding-left: 10px;
+                font-weight: bold;
+                text-align: left;
+            }
+        }
+
+        /* Style for the "Proceed to Checkout" button */
+        .proceed-button {
+            display: inline-block;
+            text-decoration: none;
+            color: white;
+            background-color: rgb(26, 183, 97); /* Button color */
+            padding: 12px 25px;
+
+            margin-left: 70%;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: bold;
+            transition: background-color 0.3s, transform 0.3s;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .proceed-button:hover {
+            background-color: rgb(22, 150, 80); /* Darker shade for hover */
+            transform: translateY(-2px); /* Subtle lift effect */
+        }
+
+        .proceed-button:active {
+            background-color: rgb(18, 130, 70); /* Even darker shade when clicked */
+            transform: translateY(0); /* Reset lift effect */
+        }
+
+        .proceed-button:focus {
+            outline: none; /* Remove default focus outline */
+            box-shadow: 0 0 0 3px rgba(26, 183, 97, 0.5); /* Custom focus outline */
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Invoice</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>Product Name</th>
+                    <th>Product Details</th>
+                    <th>Quantity</th>
+                    <th>Time Period</th>
+                    <th>Pricing Per Month</th>
+                    <th>Amount</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for details in cart_details %}
+                <tr>
+                    <td data-label="Product Name">{{ details.sq_details.product_name }}</td>
+                    <td data-label="Product Details">{{ details.sq_details.product_details }}</td>
+                    <td data-label="Quantity">{{ details.sq_details.qty }}</td>
+                    <td data-label="Time Period">{{ details.sq_details.time_period }}</td>
+                    <td data-label="Pricing Per Month">{{ details.sq_details.pricing }}</td>
+                    <td data-label="Amount">{{ details.total_amount }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="5" class="total">Total Amount</td>
+                    <td class="total">{{ total_amount }}</td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+
+    <!-- <button style="margin-left: 40%;" id="rzp-button1">
+        <a href="" style="text-decoration: none; color: rgb(10, 109, 41);">Proceed To Payment</a>
+    </button> -->
+    <div class="review-button"  id="rzp-button1">
+        <a href="" class="proceed-button">Proceed to Checkout</a>
+    </div>
+
+    <!-- payment gateway start -->
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <script>
+    var options = {
+        "key": "rzp_test_6IfskZBWdJUFZa", // Enter the Key ID generated from the Dashboard
+        "amount": "{{payment.amount}}", // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+        "currency": "INR",
+        "name": "Ecommerce Corp",
+        "description": "Payment Transaction",
+        "image": "https://example.com/your_logo",
+        "order_id": "{{payment.id}}", //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+        "handler": function (response){
+
+            // window.location.href = `http://127.0.0.1:8000/success/?razorpay_payment_id=${response.razorpay_payment_id}&razorpay_order_id=${response.razorpay_order_id}&razorpay_order_id=${response.razorpay_order_id}`
+            // window.location.href = `http://127.0.0.1:8000/success/{{payment.id}}`
+            // alert(response.razorpay_payment_id);
+
+            // alert(response.razorpay_order_id);
+            // alert(response.razorpay_signature)
+            alert("Payment Success")
+            window.location.href = '{% url "dashboard" %}';  // Replace "myorder" with your actual URL name or URL
+
+        },
+        
+        "theme": {
+            "color": "#3399cc"
+        }
+    };
+    var rzp1 = new Razorpay(options);
+    rzp1.on('payment.failed', function (response){
+            alert(response.error.code);
+            alert(response.error.description);
+            alert(response.error.source);
+            alert(response.error.step);
+            alert(response.error.reason);
+            alert(response.error.metadata.order_id);
+            alert(response.error.metadata.payment_id);
+    });
+    document.getElementById('rzp-button1').onclick = function(e){
+        rzp1.open();
+        e.preventDefault();
+    }
+    </script>
+     
+
+     <!-- end payment -->
+</body>
+</html>

@@ -11,6 +11,7 @@ from django.contrib.auth import get_user_model
 from django.views.generic import CreateView
 from .forms import  CustomUserCreationForm
 from django.conf import settings
+import razorpay
 
 # User = settings.AUTH_USER_MODEL
 
@@ -94,41 +95,79 @@ def request_for_quote_view(request):
     data = EnquiryDetails.objects.filter(user=request.user)
     return data
 
-#cart details added 
+#order created
+def create_order(request):
+    print("************enter in create order---------")
+    username= request.user.email
+    name = username.split('@')[0]
+    role=request.user.role
+    cart_details = CartDetails.objects.filter(user=request.user, is_paid=False)
+    cart_objs = MyOrder.objects.create(user=request.user)
+    amount=[]
+    for single_product in cart_details:
+        amount.append(single_product.total_amount)
+
+    total_amount=sum(amount)
+    for cart_items in cart_details:
+        cart_objs.cart.add(cart_items)
+        cart_items.is_paid=True
+        cart_items.save()   
+    cart_objs.total_amount= total_amount
+    cart_objs.is_paid = True
+    
+    
+    client = razorpay.Client(auth=(settings.KEY, settings.SECRET))
+    payment = client.order.create({'amount':total_amount*100, 'currency':'INR', 'payment_capture':1})
+    context= { 'cart':cart_objs,'payment':payment,'cart_details':cart_details,'name':name, 'role':role,'total_amount':total_amount  }
+    
+    cart_objs.razor_pay_order_id = payment['id']
+    cart_objs.save()
+
+    print("***************my order has been created")
+
+    return render(request,'warehouse/invoice.html',context)
+
+#cart details only view  page /// on click of payment above route will trigger that will generate order id
 def cart_details_view(request):
 
     username= request.user.email
     name = username.split('@')[0]
     role=request.user.role
     amount=[]
-    cart_details = CartDetails.objects.filter(user=request.user)
+    cart_details = CartDetails.objects.filter(user=request.user, is_paid=False)
     for single_product in cart_details:
         amount.append(single_product.total_amount)
     total_amount=sum(amount)
 
-    print("cart details ----    - ", cart_details)
-    print("total amount ", total_amount, type(total_amount))
-    return render(request,'warehouse/mycart.html',{'cart_details':cart_details, 'name':name, 'role':role,'total_amount':total_amount})
+    context={'name':name, 'role':role, 'total_amount':total_amount,'cart_details':cart_details}
+   
+
+    return render(request,'warehouse/mycart.html',context)
+
+## add to cart view main logic for cart
+from django.conf import settings
 
 def add_to_cart_view(request,id):
     user= request.user
-    sales_quote= SalesQuoteDetails.objects.filter(sales_quote_id=id, added_to_cart=False, sq_reject=False)
+    sales_quote= SalesQuoteDetails.objects.get(sales_quote_id=id, added_to_cart=False, sq_reject=False)
     print("sales quote add to cart====", sales_quote)
-    enquiry=sales_quote[0].enquiry
-    pricing = sales_quote[0].pricing
-    qty=sales_quote[0].qty
-    time_period= sales_quote[0].time_period
+    enquiry=sales_quote.enquiry
+    pricing = sales_quote.pricing
+    qty=sales_quote.qty
+    time_period= sales_quote.time_period
     timeing=int(time_period.split(' ')[0])
     if time_period=='1 Year':
         total_amount = int(qty)*int(pricing)*12
     else:
         total_amount = int(qty)*int(pricing)*int(timeing)
-    data = CartDetails(user=user,enquiry=enquiry, sq_details=sales_quote[0],pricing=pricing,qty=qty,time_period=time_period,total_amount=total_amount)
+    print("total amount", total_amount)
+    data = CartDetails(user=user,enquiry=enquiry, sq_details=sales_quote,pricing=pricing,qty=qty,time_period=time_period,total_amount=total_amount)
     data.save()
-    if sales_quote.exists():
-        squote=sales_quote[0]
-        squote.added_to_cart =True
-        squote.save()
+    print("cart created********** -0-----")
+    
+    sales_quote.added_to_cart =True
+    sales_quote.save()
+
     return redirect('dashboard')
 
 def reject_sales_quote_view(request,id):
@@ -220,6 +259,37 @@ def dashboard_view(request):
 
 
 
+import logging
+
+logger = logging.getLogger(__name__)
+
+def success(request):
+    print("enter in success view")
+    order_id = request.GET.get('order_id')
+    
+    if not order_id:
+        return HttpResponse("Order ID is missing", status=400)
+    
+    try:
+        cart = Cart.objects.get(razor_pay_order_id=order_id)
+        cart.is_paid = True
+        cart.save()
+        logger.info(f"Payment successful for order_id: {order_id}")
+        return HttpResponse("Payment Successful")
+    except Cart.DoesNotExist:
+        logger.error(f"Cart with order_id {order_id} does not exist")
+        return HttpResponse("Cart not found", status=404)
+
+
+# def success(request):
+#     order_id= request.GET.get('order_id')
+#     cart = Cart.objects.get(razor_pay_order_id=order_id)
+#     cart.is_paid=True
+
+#     print("enter in success----", order_id)
+#     cart.save()
+
+#     return HttpResponse("Payment Successful")
 
 
 

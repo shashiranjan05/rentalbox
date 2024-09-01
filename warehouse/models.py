@@ -67,6 +67,7 @@ class SalesQuoteDetails(models.Model):
     added_to_cart = models.BooleanField(default=False)
     sq_reject= models.BooleanField(default=False)
 
+#for adding to cart items 
 class CartDetails(models.Model):
     enquiry = models.ForeignKey(EnquiryDetails,on_delete=models.CASCADE)
     user = models.ForeignKey(User,on_delete=models.CASCADE)
@@ -77,7 +78,20 @@ class CartDetails(models.Model):
     is_paid=models.BooleanField(default=False)
     total_amount=models.IntegerField( null = True)
 
+## for connecting one single cart in a user profile 
+##my Order
+class MyOrder(models.Model):
+    cart = models.ManyToManyField(CartDetails,related_name='my_order')
+    user = models.ForeignKey(User,on_delete=models.CASCADE)
+    is_paid=models.BooleanField(default=False)
+    total_amount = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
 
+    razor_pay_order_id = models.CharField(max_length=64, null = True, blank=True)
+    razor_pay_payment_id = models.CharField(max_length=64, null = True, blank=True)
+    razor_pay_payment_signature = models.CharField(max_length=64, null = True, blank=True)
+
+
+# this is not used till 
 class CompleteDetails(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     enquiry = models.ForeignKey(EnquiryDetails,on_delete=models.CASCADE)

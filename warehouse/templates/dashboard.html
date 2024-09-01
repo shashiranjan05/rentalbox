@@ -5,6 +5,113 @@
         {% block content %}
         <head>
             <link rel = "stylesheet" type="text/css" href="{% static '/warehouse/css/dashboard.css' %}">
+
+            <style>
+                 body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        .container {
+            padding: 20px;
+        }
+        h3 {
+            text-align: left;
+            margin-top: 20px;
+        }
+        h4 {
+            margin: 20px 0 10px;
+            font-size: 18px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+        .btn-dark {
+            text-decoration: none;
+            color: white;
+            background-color: rgb(26, 183, 97);
+            padding: 8px 15px;
+            border-radius: 5px;
+            font-size: 14px;
+            font-weight: bold;
+            transition: background-color 0.3s, transform 0.3s;
+            margin-left: 10px;
+        }
+        .btn-dark:hover {
+            background-color: rgb(22, 150, 80);
+            transform: translateY(-2px);
+        }
+        .btn-dark:active {
+            background-color: rgb(18, 130, 70);
+            transform: translateY(0);
+        }
+        .btn-dark:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(26, 183, 97, 0.5);
+        }
+        .actions button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            margin-right: 5px;
+        }
+        .actions a {
+            text-decoration: none;
+            color: rgb(10, 109, 41);
+            padding: 5px 10px;
+        }
+        .actions .btn-reject a {
+            color: red;
+        }
+        .actions a:hover {
+            text-decoration: underline;
+        }
+        @media (max-width: 768px) {
+            table, th, td {
+                display: block;
+                width: 100%;
+            }
+            th, td {
+                box-sizing: border-box;
+                padding: 10px;
+            }
+            th {
+                position: absolute;
+                top: -9999px;
+                left: -9999px;
+            }
+            td {
+                border: none;
+                position: relative;
+                padding-left: 50%;
+                text-align: right;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+            td::before {
+                content: attr(data-label);
+                position: absolute;
+                left: 0;
+                width: 45%;
+                padding-left: 10px;
+                font-weight: bold;
+                text-align: left;
+                white-space: nowrap;
+            }
+        }
+            </style>
         </head>
         <body>
         
@@ -12,7 +119,7 @@
         
              <!-- header start -->
         <div class="header" style=" background-color: rgb(26, 183, 97); text-align: center; left: 0%; width: 100%; ">
-            <p><span style="margin-right: 60%; color: aliceblue; font-weight: bold;">RentalBox</span> 
+            <p><span style="margin-right: 60%; color: aliceblue; font-weight: bold;"><a href="{% url 'dashboard' %}" style="text-decoration: none;color: aliceblue;">RentalBox</a></span> 
                 <span>
                     <a href="{% url 'mycart' %}"><i class="fas fa-shopping-cart" style="color: aliceblue;"></i></a>
                     
@@ -23,77 +130,80 @@
                 <span> : {{ name }} <a href="{% url 'logout' %}" class="btn btn-dark">Logout</a></span></p>
         </div>
         <!-- header end -->
+
         <div class="container">
-         <h3 style="text-align: left;">Dashboard</h3>
+            <h3>Dashboard</h3>
+    
+            <!-- RFQ Section -->
+            <h4>RFQ
+                <a href="{% url 'enquiry' %}" class="btn-dark" style="text-decoration: none;">Create New RFQ</a>
+            </h4>
             <table>
-                <h4>RFQ
-                <a href="{% url 'enquiry' %}" class="btn btn-dark">Create New RFQ</a>
-                </h4>
-                <tr>
-                    
+                <thead>
                     <tr>
-                        <th>Enquiry Id </th>
-                        <th>Customer Name </th>
-                        <th>Org Details </th>
-                        <th>Your Requirement </th>
+                        <th>Enquiry Id</th>
+                        <th>Customer Name</th>
+                        <th>Org Details</th>
+                        <th>Your Requirement</th>
                     </tr>
-                    
+                </thead>
+                <tbody>
                     {% for val in data %}
                     <tr>
                         <td>{{ val.enquiry_id }}</td>
                         <td>{{ val.customer_name }}</td>
                         <td>{{ val.org_details }}</td>
-                        <td>{{ val.your_requirement }}</td>                        
+                        <td>{{ val.your_requirement }}</td>
                     </tr>
                     {% endfor %}
-                </tr>
+                </tbody>
             </table>
-            </br>
+    
+            <!-- Sales Quote Section -->
+            <h4>Sales Quote
+                {% if role == 'ADMIN' %}
+                    <a href="{% url 'salesquote' %}" class="btn-dark">Create Sales Quote</a>
+                {% endif %}
+            </h4>
             <table>
-                <h4>Sales Quote
-                    {% if role == 'ADMIN' %}
-                         <a href="{% url 'salesquote' %}" class="btn btn-dark">Create Sales Quote</a>
-                    {% endif %}
-                </h4>
+                <thead>
                     <tr>
+                        <th>Enquiry Id</th>
+                        <th>Product Id</th>
+                        <th>Product Name</th>
+                        <th>Product Details</th>
+                        <th>Time Period</th>
+                        <th>Product Pricing</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for val in data %}
+                        {% for products in sales_quote %}
+                        {% if products.enquiry.enquiry_id == val.enquiry_id %}
                         <tr>
-                            <th>Enquiry Id</th>
-                            <th>Product Id</th>
-                            <th>Product Name</th>
-                            <th>Product Details</th>
-                            <th>Time Period</th>
-                            <th> Product Pricing</th>
-                            <th><h4>Actions</h4></th>
-                            
-                        </tr>
-                        {% for val in data %}
-                        
-                            {% for products in sales_quote %}
-                            <tr>
-                            {% if products.enquiry.enquiry_id == val.enquiry_id %}
                             <td>{{ val.enquiry_id }}</td>
                             <td>{{ products.product_id }}</td>
                             <td>{{ products.product_name }}</td>
                             <td>{{ products.product_details }}</td>
                             <td>{{ products.time_period }}</td>
                             <td>{{ products.pricing }}</td>
-                            
-                            <td>
+                            <td class="actions">
                                 <button>
-                                    <a href="{% url 'add_to_cart' id=products.sales_quote_id %}" style="text-decoration: none; color: rgb(10, 109, 41);">Add To Cart</a>
+                                    <a href="{% url 'add_to_cart' id=products.sales_quote_id %}">Add To Cart</a>
                                 </button>
-                                
-                                <button><a href="{% url 'reject_sales_quote' id=products.sales_quote_id %}" style="text-decoration: none; color: red;"> Reject</a></button>
+                                <button class="btn-reject">
+                                    <a href="{% url 'reject_sales_quote' id=products.sales_quote_id %}">Reject</a>
+                                </button>
                             </td>
-                            {% endif %}
                         </tr>
-                            {% endfor %}
-                       
+                        {% endif %}
                         {% endfor %}
-
-                    </tr>
+                    {% endfor %}
+                </tbody>
             </table>
         </div>
+        
                <!-- footer start -->
         <div class="footer" style="background-color: rgb(26, 183, 97); text-align: center; left: 0%; width: 100%; bottom: 0%; position: fixed; ">
             <p>&copy shashiranjan<a href="https://www.linkedin.com/in/shashiranjan05/" ><i class="fa fa-linkedin-square" style="font-size:24px; color: black;"></i></a> &nbsp;<a href="https://github.com/shashiranjan05"><i class="fa fa-github-square" style="font-size:24px; color: black;" ></i></a>
