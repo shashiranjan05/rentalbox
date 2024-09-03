@@ -5,7 +5,18 @@
 {% block content %}
 <html>
     <head>
-        <link rel = "stylesheet" type="text/css" href="{% static '/warehouse/css/sales_quote.css' %}">
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Enquiry Page | RentalBox</title>
+        <link rel = "stylesheet" type="text/css" href="{% static '/warehouse/css/enquiry.css' %}">
+        <style>
+            h3{
+                /* background-color: green; */
+                color: rgb(2, 76, 141);
+                margin-left: 9%;
+
+            }
+        </style>
     </head>
      <body>  
        <!-- header start -->
@@ -18,7 +29,7 @@
     </div>
     <!-- header end -->
         <div class="container">
-            <h3 style="background-color: green; color: aliceblue; margin-right: 75%;">Request For Quote</h3>
+            <h3>Request For Quote</h3>
 
             <form action = "" method = "POST">
                 {% csrf_token %} 

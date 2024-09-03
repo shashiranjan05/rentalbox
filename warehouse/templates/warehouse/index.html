@@ -20,9 +20,10 @@
         }
 
         .header {
-            text-align: center;
+            /* text-align: center; */
             color: #ffffff;
             background-color: #1ab761; /* Different color for header and footer */
+            height: 5em;
         }
 
         .header a {
@@ -157,9 +158,13 @@
     <!-- Header -->
     <div class="header">
         <p>
-            <span style="margin-right: 55%;"><a href="">RentalBox</a></span> 
-            <span>Login by <strong>{{ role }}</strong></span>
-            <span>: {{ name }} <a href="{% url 'logout' %}" class="btn btn-dark">Logout</a></span>
+            <span style="margin-left: 8%;"><a href="">RentalBox</a></span> 
+            <span style="margin-left: 50%;"><strong>{{ role }}</strong></span>
+            {% if name != 'AnonymousUser' %}
+                <span>{{ name }} <a href="{% url 'logout' %}" class="btn btn-dark">Logout</a></span>
+            {% else %}
+                <span ><a href="{% url 'login' %}">Login</a></span>
+            {% endif %}
         </p>
     </div>
 

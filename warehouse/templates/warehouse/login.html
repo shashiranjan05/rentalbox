@@ -1,41 +1,58 @@
 {% extends 'layout/app.html' %}
+{% load static %}
 
 {% block content %}
-
-<div class="row justify-content-center">
-    <div class="col-sm-6">
-        <h2 class="text-muted">Login</h2>
-        {% if form.non_field_errors %}
-        <small class="text-danger">
-            {{ form.non_field_errors.as_ul }}
-        </small>
-        {% endif %}
-        <form method="POST" action="{% url 'login' %}">
-            {% csrf_token %}
-            <div class="form-group">
-                <label for="{{ form.username.id_for_label }}">
-                    Enter Email ID:
-                </label>
-                <input type="text" name="{{ form.username.name }}" class="form-control" value="{{ form.username.value}}">
-                <span class="text-danger">{{ form.username.errors }}</span>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'warehouse/css/login.css' %}">
+    <title>Login</title>
+</head>
+<body>
+    <div class="container my-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="login-box">
+                    <h2 class="text-muted">Login</h2>
+                    {% if form.non_field_errors %}
+                    <div class="alert alert-danger">
+                        {{ form.non_field_errors.as_ul }}
+                    </div>
+                    {% endif %}
+                    <form method="POST" action="{% url 'login' %}">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="{{ form.username.id_for_label }}">
+                                Enter Email ID:
+                            </label>
+                            <input type="text" name="{{ form.username.name }}" id="{{ form.username.id_for_label }}" class="form-control" value="{{ form.username.value }}">
+                            <div class="text-danger">{{ form.username.errors }}</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="{{ form.password.id_for_label }}">
+                                Password:
+                            </label>
+                            <input type="password" name="{{ form.password.name }}" id="{{ form.password.id_for_label }}" class="form-control" value="{{ form.password.value }}">
+                            <div class="text-danger">{{ form.password.errors }}</div>
+                        </div>
+                        <button type="submit" class="btn btn-dark">Login</button>
+                        <a href="{% url 'register' %}" class="btn btn-light">Create an Account</a>
+                    </form>
+                </div>
             </div>
-            <div class="form-group">
-                <label for="{{ form.password.id_for_label }}">
-                    Password:
-                </label>
-                <input type="password" name="{{ form.password.name }}" class="form-control" value="{{ form.password.value}}">
-                <span class="text-danger">{{ form.password.errors }}</span>
-            </div>
-           
-            <button type="submit" class="btn btn-dark">Login</button>
-            <a href="{% url 'register' %}" class="btn btn-default">Create an Account</a>
-        </form>
+        </div>
     </div>
-</div>
-<!-- footer start -->
-<div class="footer" style="background-color: rgb(26, 183, 97); text-align: center; left: 0%; width: 100%; bottom: 0%; position: fixed; ">
-    <p>&copy shashiranjan<a href="https://www.linkedin.com/in/shashiranjan05/" ><i class="fa fa-linkedin-square" style="font-size:24px; color: black;"></i></a> &nbsp;<a href="https://github.com/shashiranjan05"><i class="fa fa-github-square" style="font-size:24px; color: black;" ></i></a>
-    </p>
-</div>
-<!-- footer end -->
+
+    <!-- Footer Start -->
+    <div class="footer">
+        <p>&copy; shashiranjan
+            <a href="https://www.linkedin.com/in/shashiranjan05/"><i class="fa fa-linkedin-square" style="font-size:24px; color: black;"></i></a>
+            <a href="https://github.com/shashiranjan05"><i class="fa fa-github-square" style="font-size:24px; color: black;"></i></a>
+        </p>
+    </div>
+    <!-- Footer End -->
+</body>
+</html>
 {% endblock %}
