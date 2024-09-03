@@ -47,6 +47,11 @@
         tfoot tr {
             background-color: #f9f9f9;
         }
+        input[type="number"], select {
+        width: 100%;
+        padding: 8px;
+        box-sizing: border-box;
+    }
         @media (max-width: 768px) {
             table {
                 border: 0;
@@ -108,7 +113,7 @@
             box-shadow: 0 0 0 3px rgba(26, 183, 97, 0.5); /* Custom focus outline */
         }
             </style>
-
+            
 
 
         </head>
@@ -139,39 +144,79 @@
                             <th>Amount</th>
                         </tr>
                     </thead>
+                    <form action = "{% url 'update_cart_details' %}" method = "POST">
+                        {% csrf_token %} 
                     <tbody>
+                        
                         {% for details in cart_details %}
                         <tr>
                             <td data-label="Product Name">{{ details.sq_details.product_name }}</td>
                             <td data-label="Product Details">{{ details.sq_details.product_details }}</td>
-                            <td data-label="Quantity">{{ details.sq_details.qty }}</td>
-                            <td data-label="Time Period">{{ details.sq_details.time_period }}</td>
-                            <td data-label="Pricing Per Month">{{ details.sq_details.pricing }}</td>
-                            <td data-label="Amount">{{ details.total_amount }}</td>
+                            <!--  -->
+                            <td data-label="Quantity">
+                                <input type="number" id="quantity_{{ details.id }}" name="quantity_{{ details.id }}" value="{{ details.qty }}" class="form-control" onchange="updateAmount(this)">
+                            </td>
+                            <td data-label="Time Period">
+                                <select name="time_period_{{ details.id }}" class="form-control" onchange="updateAmount(this)" id="time_period">
+                                    <option value="3" {% if details.time_period == "3" %}selected{% endif %}>3 Months</option>
+                                    <option value="6" {% if details.time_period == "6" %}selected{% endif %}>6 Months</option>
+                                    <option value="9" {% if details.time_period == "9" %}selected{% endif %}>9 Months</option>
+                                    <option value="12" {% if details.time_period == "12" %}selected{% endif %}>1 Year</option>
+                                </select>
+                            </td>
+                            <td data-label="Pricing Per Month">
+                                <input type="number" id="pricing_{{ details.id }}" name="pricing_{{ details.id }}" value="{{ details.pricing }}" class="form-control" onchange="updateAmount(this)">
+                            </td>
+
+
+                            <!--  -->
+
+                            <td data-label="Amount">
+                                <span class="amount">{{ details.total_amount }}</span>
+                            </td>
+                            
                         </tr>
                         {% endfor %}
                     </tbody>
+                   
                     <tfoot>
                         <tr>
                             <td colspan="5" class="total">Total Amount</td>
-                            <td class="total">{{ total_amount }}</td>
+                            <td class="amount">{{ total_amount }}</td>
                         </tr>
                     </tfoot>
                 </table>
-                </div>
-         
-
+                <button type="submit" class="btn btn-primary">Update Cart</button>
+            
+            </div> 
             <div class="review-button">
                 <a href="{% url 'create_order' %}" style="text-decoration: none;" class="proceed-button">Review Order</a>
             </div>
+        </form>
         </div>
-               <!-- footer start -->
+        <!-- footer start -->
         <div class="footer" style="background-color: rgb(26, 183, 97); text-align: center; left: 0%; width: 100%; bottom: 0%;  ">
             <p>&copy shashiranjan<a href="https://www.linkedin.com/in/shashiranjan05/" ><i class="fa fa-linkedin-square" style="font-size:24px; color: black;"></i></a> &nbsp;<a href="https://github.com/shashiranjan05"><i class="fa fa-github-square" style="font-size:24px; color: black;" ></i></a>
             </p>
         </div>
         <!-- footer end -->
-        
+        <script>
+            function updateAmount(element) {
+                // Get the row containing the changed element
+                var row = element.closest('tr');
+                
+                var quantity = parseFloat(row.querySelector('input[name^="quantity"]').value) || 0;
+                var pricing = parseFloat(row.querySelector('input[name^="pricing"]').value) || 0;
+                var time_period = parseFloat(row.querySelector('select[name^="time_period"]').value) || 0;
+                
+                // Calculate the total amount
+                var totalAmount = quantity * pricing * time_period;
+                
+                // Update the amount cell
+                row.querySelector('.amount').textContent = totalAmount.toFixed(2);
+                
+            }
+        </script>
         </body>
     {% endblock %}
 </html>
