@@ -1,54 +1,70 @@
 {% extends 'layout/app.html' %}
+{% load static %}
 
 {% block content %}
-<div class="row justify-content-center">
-    <div class="col-sm-6">
-        <h2 class="text-muted">Register</h2>
-        <form method="POST" action="{% url 'register' %}">
-            {% csrf_token %}
-            
-            <div class="form-group">
-                <label for="{{ form.email.id_for_label }}">
-                    Enter Email ID:
-                </label>
-                <input type="text" name="{{ form.email.name }}" class="form-control" value="{{ form.email.value}}">
-                <span class="text-danger">{{ form.email.errors }}</span>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'warehouse/css/register.css' %}">
+    <title>Register</title>
+</head>
+<body>
+    <div class="container my-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="form-box">
+                    <h2 class="text-muted">Register</h2>
+                    <form method="POST" action="{% url 'register' %}">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="{{ form.email.id_for_label }}">
+                                Enter Email ID:
+                            </label>
+                            <input type="text" name="{{ form.email.name }}" id="{{ form.email.id_for_label }}" class="form-control" value="{{ form.email.value }}">
+                            <div class="text-danger">{{ form.email.errors }}</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="{{ form.role.id_for_label }}">
+                                Role:
+                            </label>
+                            <select name="{{ form.role.name }}" id="{{ form.role.id_for_label }}" class="form-control" required>
+                                <option>CUSTOMER</option>
+                                <!-- <option>ADMIN</option> -->
+                            </select>
+                            <div class="text-danger">{{ form.role.errors }}</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="{{ form.password1.id_for_label }}">
+                                Password:
+                            </label>
+                            <input type="password" name="{{ form.password1.name }}" id="{{ form.password1.id_for_label }}" class="form-control" value="{{ form.password1.value }}">
+                            <div class="text-danger">{{ form.password1.errors }}</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="{{ form.password2.id_for_label }}">
+                                Re-Type Password:
+                            </label>
+                            <input type="password" name="{{ form.password2.name }}" id="{{ form.password2.id_for_label }}" class="form-control" value="{{ form.password2.value }}">
+                            <div class="text-danger">{{ form.password2.errors }}</div>
+                        </div>
+                        <button type="submit" class="btn btn-dark">Submit</button>
+                        <a href="{% url 'login' %}" class="btn btn-light">Already have an Account</a>
+                    </form>
+                </div>
             </div>
-            <div class="form-group">
-                <label for="{{ form.role.id_for_label }}">
-                    Role:
-                </label>
-                <select name="{{ form.role.name }}"  value="{{ form.role.value}}" required>
-                    <option>CUSTOMER</option>
-                    <!-- <option>ADMIN</option> -->
-                </select><br> 
-                <span class="text-danger">{{ form.role.errors }}</span>
-            </div>
-            <div class="form-group">
-                <label for="{{ form.password1.id_for_label }}">
-                    Password:
-                </label>
-                <input type="password" name="{{ form.password1.name }}" class="form-control" value="{{ form.password1.value}}">
-                <span class="text-danger">{{ form.password1.errors }}</span>
-            </div>
-            <div class="form-group">
-                <label for="{{ form.password2.id_for_label }}">
-                    Re-Type Password:
-                </label>
-                <input type="password" name="{{ form.password2.name }}" class="form-control" value="{{ form.password2.value}}">
-                <span class="text-danger">{{ form.password2.errors }}</span>
-            </div>
-            <button type="submit" class="btn btn-dark">Submit</button>
-            <a href="{% url 'login' %}" class="btn btn-default">Already an Account</a>
-
-        </form>
+        </div>
     </div>
-     
-</div>
- <!-- footer start -->
- <div class="footer" style="background-color: rgb(26, 183, 97); text-align: center; left: 0%; width: 100%; bottom: 0%; position: fixed; ">
-    <p>&copy shashiranjan<a href="https://www.linkedin.com/in/shashiranjan05/" ><i class="fa fa-linkedin-square" style="font-size:24px; color: black;"></i></a> &nbsp;<a href="https://github.com/shashiranjan05"><i class="fa fa-github-square" style="font-size:24px; color: black;" ></i></a>
-    </p>
-</div>
-<!-- footer end -->
+
+    <!-- Footer Start -->
+    <div class="footer">
+        <p>&copy; shashiranjan
+            <a href="https://www.linkedin.com/in/shashiranjan05/"><i class="fa fa-linkedin-square" style="font-size:24px; color: black;"></i></a>
+            <a href="https://github.com/shashiranjan05"><i class="fa fa-github-square" style="font-size:24px; color: black;"></i></a>
+        </p>
+    </div>
+    <!-- Footer End -->
+</body>
+</html>
 {% endblock %}

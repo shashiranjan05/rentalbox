@@ -16,11 +16,20 @@ import razorpay
 
 # Create your views here.
 def index(request):
-    username= request.user.email
-    name = username.split('@')[0]
-    role=request.user.role
-
+    user_obj=request.user
+    print("username -----------", user_obj)
+    if request.user.is_authenticated:
+        # This means the user is logged in
+        print("-------------found")
+        username = request.user.email
+        name = username.split('@')[0]
+        role = request.user.role
+    else:
+        print("not found")
+        name = 'AnonymousUser'
+        role = ''
     context = {'name':name,'role':role}
+
     return render(request, 'warehouse/index.html', context)
 
 # def index(request):
@@ -42,7 +51,6 @@ def create_order_id():
     current_second= current_time.second
 
     current_order_id = str(current_year) + str(current_month) + str(current_day) + str(current_hour) + str(current_minute) + str(current_second)
-    print("current_order_id----", current_order_id)
 
     return current_order_id
 
