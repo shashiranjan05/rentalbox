@@ -7,7 +7,6 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model
-# from .forms import CustomerSignUpForm 
 from django.views.generic import CreateView
 from .forms import  CustomUserCreationForm
 from django.conf import settings
@@ -17,7 +16,12 @@ import razorpay
 
 # Create your views here.
 def index(request):
-    return HttpResponse("Hello, world. You're at the polls index.")
+    username= request.user.email
+    name = username.split('@')[0]
+    role=request.user.role
+
+    context = {'name':name,'role':role}
+    return render(request, 'warehouse/index.html', context)
 
 # def index(request):
 #     latest_question_list = Question.objects.order_by('-pub_date')[:5]
