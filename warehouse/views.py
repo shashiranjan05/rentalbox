@@ -139,6 +139,35 @@ def create_order(request):
 
     return render(request,'warehouse/invoice.html',context)
 
+def update_cart_details(request):
+    username= request.user.email
+    name = username.split('@')[0]
+    role=request.user.role
+     #for updating cart items and qty and time period
+    cart_details = CartDetails.objects.filter(user=request.user, is_paid=False)
+    if request.method == 'POST':
+        print("enter for update ===============", cart_details)
+        for items in cart_details:
+            time_period = request.POST.get(f"time_period_{items.id}")
+            qty= request.POST.get(f"quantity_{items.id}")
+            pricing= request.POST.get(f"pricing_{items.id}")
+            items.time_period= time_period
+            items.pricing = pricing
+            items.qty= qty
+            print(time_period, pricing, qty)
+            timeing=int(items.time_period.split(' ')[0])
+            if time_period=='1 Year':
+                total_amount = int(qty)*int(pricing)*12
+            else:
+                total_amount = int(qty)*int(pricing)*int(timeing)
+            items.total_amount= total_amount
+            items.save()
+    print("items has been updated========================")
+
+
+    return redirect('mycart')
+
+        
 #cart details only view  page /// on click of payment above route will trigger that will generate order id
 def cart_details_view(request):
 
@@ -150,10 +179,9 @@ def cart_details_view(request):
     for single_product in cart_details:
         amount.append(single_product.total_amount)
     total_amount=sum(amount)
+    print("enter in cart details view part")
 
     context={'name':name, 'role':role, 'total_amount':total_amount,'cart_details':cart_details}
-   
-
     return render(request,'warehouse/mycart.html',context)
 
 ## add to cart view main logic for cart

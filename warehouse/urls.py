@@ -12,5 +12,6 @@ urlpatterns = [
     path('addtocart/<int:id>',views.add_to_cart_view,name='add_to_cart'),
     path('create_order/',views.create_order,name='create_order'),
     path('sqreject/<int:id>/', views.reject_sales_quote_view, name='reject_sales_quote'),
-    path('success/', views.success, name='success')
+    path('success/', views.success, name='success'),
+    path('update_cart_details/', views.update_cart_details, name='update_cart_details')
 ]
