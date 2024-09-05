@@ -21,8 +21,11 @@ urlpatterns = [
     # path('success/', views.success, name='success'),
     path('update_cart_details/', views.update_cart_details, name='update_cart_details'),
     path('createproduct/', views.create_products_details, name='create_product'),
-    path('product/', views.product_details_view, name='product')
+    path('product/', views.product_details_view, name='product'),
+    path('product/<str:category>', views.product_items_by_filter, name='product_items')
 
 ]
+
+
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

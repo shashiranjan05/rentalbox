@@ -103,7 +103,7 @@ class CartDetails(models.Model):
     pricing = models.CharField(max_length=64, null = True)
     qty = models.IntegerField(default=1, null=True)
     is_paid=models.BooleanField(default=False)
-    total_amount=models.IntegerField( null = True)
+    total_amount=models.IntegerField( max_length=64,null = True)
 
 
 ## for connecting one single cart in a user profile 
@@ -112,7 +112,7 @@ class MyOrder(models.Model):
     cart = models.ManyToManyField(CartDetails,related_name='my_order')
     user = models.ForeignKey(User,on_delete=models.CASCADE)
     is_paid=models.BooleanField(default=False)
-    total_amount = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
+    total_amount = models.DecimalField(max_digits=100, decimal_places=2, blank=True, null=True)
 
     razor_pay_order_id = models.CharField(max_length=64, null = True, blank=True)
     razor_pay_payment_id = models.CharField(max_length=64, null = True, blank=True)
