@@ -126,11 +126,29 @@
             <tbody>
                 {% for details in cart_details %}
                 <tr>
-                    <td data-label="Product Name">{{ details.sq_details.product_name }}</td>
-                    <td data-label="Product Details">{{ details.sq_details.product_details }}</td>
-                    <td data-label="Quantity">{{ details.sq_details.qty }}</td>
-                    <td data-label="Time Period">{{ details.sq_details.time_period }}</td>
-                    <td data-label="Pricing Per Month">{{ details.sq_details.pricing }}</td>
+                    <td data-label="Product Name">
+
+                        {% if details.sq_details and details.sq_details.product_name %}
+                            {{ details.sq_details.product_name }}
+                        {% elif details.product_obj and details.product_obj.name %}
+                            {{ details.product_obj.name }}
+                        {% else %}
+                            Product name not available
+                        {% endif %}
+                        </td>
+                        <td data-label="Product Details">
+                            {% if details.sq_details and details.sq_details.product_details %}
+                                {{ details.sq_details.product_details }}
+                            {% elif details.product_obj and details.product_obj.description %}
+                                {{ details.product_obj.description }}
+                            {% else %}
+                                Product details not available
+                            {% endif %}
+                        </td>
+
+                    <td data-label="Quantity">{{ details.qty }}</td>
+                    <td data-label="Time Period">{{ details.time_period }}</td>
+                    <td data-label="Pricing Per Month">{{ details.pricing }}</td>
                     <td data-label="Amount">{{ details.total_amount }}</td>
                 </tr>
                 {% endfor %}
