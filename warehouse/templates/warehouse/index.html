@@ -39,13 +39,13 @@
         <div class="tabs">
             <ul class="nav nav-tabs" id="myTab" role="tablist">
                 <li class="nav-item" role="presentation">
-                    <a class="nav-link" id="appliances-tab" data-toggle="tab" href="#appliances" role="tab" aria-controls="appliances" aria-selected="true">Appliances</a>
+                    <a  href="{% url 'product_items' category='APPLIANCES' %}" role="tab" aria-controls="appliances" aria-selected="true">Appliances</a>
                 </li>
                 <li class="nav-item" role="presentation" style="margin-left: 20%;">
-                    <a class="nav-link" id="electronics-tab" data-toggle="tab" href="#electronics" role="tab" aria-controls="electronics" aria-selected="false">Electronics</a>
+                    <a  href="{% url 'product_items' category='ELECTRONICS' %}" role="tab" aria-controls="electronics" aria-selected="false">Electronics</a>
                 </li>
                 <li class="nav-item" role="presentation" style="margin-left: 20%;">
-                    <a class="nav-link" id="furniture-tab" data-toggle="tab" href="#furniture" role="tab" aria-controls="furniture" aria-selected="false">Furniture</a>
+                    <a  href="{% url 'product_items' category='FURNITURE' %}" role="tab" aria-controls="furniture" aria-selected="false">Furniture</a>
                 </li>
             </ul>
         </div>

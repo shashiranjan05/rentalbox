@@ -99,6 +99,25 @@ def sales_quote_view(request):
     return render(request, 'warehouse/sales_quote.html',{'all_data':all_data, 'name':name, 'role':role})
 
 
+#filter by appliances , furniture, electronics
+def product_items_by_filter(request, category):
+    user_obj=request.user
+    if request.user.is_authenticated:
+        username = request.user.email
+        name = username.split('@')[0]
+        role = request.user.role
+    else:
+        name = 'AnonymousUser'
+        role = ''
+
+    product_obj = Products.objects.filter(categories=category)
+    context={'product_obj':product_obj,'name':name, 'role':role}
+
+    return render(request, 'warehouse/product.html',context )
+
+
+
+
 #create product details
 def create_products_details(request):
 
@@ -112,9 +131,15 @@ def create_products_details(request):
     return render(request, 'warehouse/create_product.html', {'form': form})
 
 def product_details_view(request):
-    username= request.user.email
-    name = username.split('@')[0]
-    role=request.user.role
+    user_obj=request.user
+    if request.user.is_authenticated:
+        username = request.user.email
+        name = username.split('@')[0]
+        role = request.user.role
+    else:
+        name = 'AnonymousUser'
+        role = ''
+
     product_obj = Products.objects.all()
     context={'name':name, 'role':role, 'product_obj':product_obj}
     return render(request, 'warehouse/product.html', context)
@@ -145,35 +170,33 @@ def create_order(request):
     name = username.split('@')[0]
     role=request.user.role
     cart_details = CartDetails.objects.filter(user=request.user, is_paid=False)
-    cart_objs = MyOrder.objects.create(user=request.user)
-    amount=[]
-    for single_product in cart_details:
-        amount.append(single_product.total_amount)
+   
+    if cart_details.exists():
+        cart_objs = MyOrder.objects.create(user=request.user)
+        amount=[]
+        for single_product in cart_details:
+            amount.append(single_product.total_amount)
 
-    print("****************amunt", amount)
-    total_amount=sum(amount)
-    for cart_items in cart_details:
-        cart_objs.cart.add(cart_items)
-        cart_items.is_paid=True
-        cart_items.save()   
-    cart_objs.total_amount= total_amount
-    cart_objs.is_paid = True
-    print("***************", cart_objs)
-    print("***********amount****", total_amount)
-    
-    
-    client = razorpay.Client(auth=(settings.KEY, settings.SECRET))
-    print("***************", client)
-    
-    payment = client.order.create({'amount':total_amount*100, 'currency':'INR', 'payment_capture':1})
-    context= { 'cart':cart_objs,'payment':payment,'cart_details':cart_details,'name':name, 'role':role,'total_amount':total_amount  }
-    print("***************", context)
-    cart_objs.razor_pay_order_id = payment['id']
-    cart_objs.save()
+        total_amount=sum(amount)
+        for cart_items in cart_details:
+            cart_objs.cart.add(cart_items)
+            cart_items.is_paid=True
+            cart_items.save()   
+        cart_objs.total_amount= total_amount
+        cart_objs.is_paid = True
+        
+        
+        client = razorpay.Client(auth=(settings.KEY, settings.SECRET))
+        
+        payment = client.order.create({'amount':total_amount*100, 'currency':'INR', 'payment_capture':1})
+        context= { 'cart':cart_objs,'payment':payment,'cart_details':cart_details,'name':name, 'role':role,'total_amount':total_amount  }
+        cart_objs.razor_pay_order_id = payment['id']
+        cart_objs.save()
 
-    print("***************my order has been created")
+        print("***************my order has been created")
 
-    return render(request,'warehouse/invoice.html',context)
+        return render(request,'warehouse/invoice.html',context)
+    return redirect('mycart')
 
 def update_cart_details(request):
     username= request.user.email
@@ -328,7 +351,7 @@ def login_view(request):
 
 def logout_view(request):
     logout(request)
-    return redirect('login')
+    return redirect('product')
 
 @login_required(login_url='/login/')
 def dashboard_view(request):
