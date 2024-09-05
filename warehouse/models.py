@@ -34,8 +34,6 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         return self.email
 
 
-
-
 #request for quote
 class EnquiryDetails(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null = True)
@@ -47,7 +45,6 @@ class EnquiryDetails(models.Model):
     your_requirement = models.CharField(max_length=64, null = True)
 
     
-
 CATEGORY_CHOICES = (
     ('3 Months', '3 Months'),
     ('6 Months', '6 Months'),
@@ -55,17 +52,50 @@ CATEGORY_CHOICES = (
     ('1 Year', '1 Year'),
 
 )
+
+PRODUCT_CATEGORIES = (
+    ('APPLIANCES', 'APPLIANCES'),
+    ('ELECTRONICS', 'ELECTRONICS'),
+    ('FURNITURE', 'FURNITURE'),
+   
+)
+
+# product id, product name , categories, sub-categories,product details, pricing, 
+
+class Products(models.Model):
+    sku= models.CharField(max_length=264, null = True)
+    image = models.ImageField(upload_to='products/', blank=True, null=True) 
+    name= models.CharField(max_length=264, null = True)
+    categories = models.CharField(choices=PRODUCT_CATEGORIES, max_length = 200, null = True, default="Other")
+    description= models.CharField(max_length=1264, null = True)
+    discount_price = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True) 
+    brand = models.CharField(max_length=100, blank=True, null=True)
+    price= models.DecimalField(max_digits=25, decimal_places=2)
+    is_available = models.BooleanField(default=True)  
+    stock = models.PositiveIntegerField()  
+    tags = models.CharField(max_length=255, blank=True, null=True) 
+
+    def __str__(self):
+        return self.name
+
+
 class SalesQuoteDetails(models.Model):
     enquiry = models.ForeignKey(EnquiryDetails,on_delete=models.CASCADE)
     sales_quote_id = models.CharField(max_length=64, null = True)
-    product_name = models.CharField(max_length=264, null = True)
-    product_id = models.CharField(max_length = 128, null = True)
-    qty= models.IntegerField(null = True) 
-    product_details = models.CharField(max_length = 128, null = True)
+
+    product_obj = models.ForeignKey(Products,on_delete=models.CASCADE, null=True)
+
+    product_name = models.CharField(max_length=264, null = True)   #
+    product_id = models.CharField(max_length = 128, null = True)   #
+    qty= models.IntegerField(null = True)                           
+    product_details = models.CharField(max_length = 128, null = True)  #
     time_period = models.CharField(choices=CATEGORY_CHOICES, max_length = 200, null = True, default="Other")
-    pricing = models.CharField(max_length=64, null = True)
+    pricing = models.CharField(max_length=64, null = True)  #
     added_to_cart = models.BooleanField(default=False)
     sq_reject= models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.product
 
 #for adding to cart items 
 class CartDetails(models.Model):
@@ -78,6 +108,9 @@ class CartDetails(models.Model):
     is_paid=models.BooleanField(default=False)
     total_amount=models.IntegerField( null = True)
 
+    def __str__(self):
+        return self.sq_details
+
 ## for connecting one single cart in a user profile 
 ##my Order
 class MyOrder(models.Model):
@@ -89,6 +122,7 @@ class MyOrder(models.Model):
     razor_pay_order_id = models.CharField(max_length=64, null = True, blank=True)
     razor_pay_payment_id = models.CharField(max_length=64, null = True, blank=True)
     razor_pay_payment_signature = models.CharField(max_length=64, null = True, blank=True)
+
 
 
 # this is not used till 

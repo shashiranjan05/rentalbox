@@ -1,0 +1,151 @@
+
+
+{% extends 'layout/app.html' %}
+{% load static %}
+
+{% block content %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Product</title>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel = "stylesheet" type="text/css" href="{% static '/warehouse/css/product.css' %}">
+</head>
+<body>
+  <!-- header start -->
+  <div class="header" style=" background-color: rgb(26, 183, 97); text-align: center; left: 0%; width: 100%; ">
+    <p><span style="margin-right: 60%; color: aliceblue; font-weight: bold;"><a href="{% url 'dashboard' %}" style="text-decoration: none;color: aliceblue;">RentalBox</a></span> 
+        <span >Login by 
+            <span style="color: aliceblue; font-weight: bold;"> {{role}} </span>
+        </span>
+        <span> : {{ name }} <a href="{% url 'logout' %}" class="btn btn-dark">Logout</a></span></p>
+</div>
+<!-- header end -->
+<div class="container">
+    <!-- Form container with raised platform effect -->
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="form-container">
+                <h2 class="text-center mb-4">Create New Product</h2>
+                
+                <form action="" method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="col-25">
+                            <label for="brand">Brand: </label>
+                        </div>
+                        <div class="col-75">
+                            <input id="brand" type="text" name="brand"><br> <br> 
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-25">
+                            <label for="name">Product name: </label>
+                        </div>
+                        <div class="col-75">
+                            <input id="name" type="text" name="name"><br> <br> 
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-25">
+                            <label for="sku">Product sku: </label>
+                        </div>
+                        <div class="col-75">
+                            <input id="sku" type="text" name="sku"><br> <br> 
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-25">
+                            <label for="description">Product description: </label>
+                        </div>
+                        <div class="col-75">
+                            <input id="description" type="text" name="description"><br> <br> 
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-25">
+                            <label for="price">Product price: </label>
+                        </div>
+                        <div class="col-75">
+                            <input id="price" type="number" name="price"><br> <br> 
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-25">
+                            <label for="discount_price">Discount Price: </label>
+                        </div>
+                        <div class="col-75">
+                            <input id="discount_price" type="number" name="discount_price"><br> <br> 
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-25">
+                            <label for="stock">Stock: </label>
+                        </div>
+                        <div class="col-75">
+                            <input id="stock" type="number" name="stock"><br> <br> 
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-25">
+                            <label for="categories">Product Category: </label>
+                        </div>
+                        <div class="col-75">
+                            <select name="categories" id="categories" required>
+                                <option>APPLIANCES</option>
+                                <option>ELECTRONICS</option>
+                                <option>FURNITURE</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-25">
+                            <label for="image">Upload Image: </label>
+                        </div>
+                        <div class="col-75">
+                            <input id="image" type="file" name="image"><br> <br> 
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-25">
+                            <label for="is_available">Is Available: </label>
+                        </div>
+                        <div class="col-75">
+                            <input id="is_available" type="checkbox" name="is_available"><br> <br> 
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-25">
+                            <label for="tags">Product Tags: </label>
+                        </div>
+                        <div class="col-75">
+                            <input id="tags" type="text" name="tags"><br> <br> 
+                        </div>
+                    </div>
+
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-primary">Save Product</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+ <!-- footer start -->
+ <div class="footer" style="background-color: rgb(26, 183, 97); text-align: center; left: 0%; width: 100%; bottom: 0%; ">
+    <p>&copy shashiranjan<a href="https://www.linkedin.com/in/shashiranjan05/" ><i class="fa fa-linkedin-square" style="font-size:24px; color: black;"></i></a> &nbsp;<a href="https://github.com/shashiranjan05"><i class="fa fa-github-square" style="font-size:24px; color: black;" ></i></a>
+    </p>
+</div>
+<!-- footer end -->
+
+
+</body>
+</html>
+
+{% endblock %}

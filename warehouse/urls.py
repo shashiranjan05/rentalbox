@@ -1,5 +1,8 @@
 from warehouse import views
 from django.urls import path
+from django.conf import settings
+
+from django.conf.urls.static import static
 
 urlpatterns = [
     path('enquiry/', views.enquiry_view, name='enquiry'),
@@ -13,5 +16,8 @@ urlpatterns = [
     path('create_order/',views.create_order,name='create_order'),
     path('sqreject/<int:id>/', views.reject_sales_quote_view, name='reject_sales_quote'),
     path('success/', views.success, name='success'),
-    path('update_cart_details/', views.update_cart_details, name='update_cart_details')
+    path('update_cart_details/', views.update_cart_details, name='update_cart_details'),
+    path('product/', views.create_products_details, name='product')
 ]
+
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -1,0 +1,167 @@
+/* General Styling */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #e0f7fa;
+    margin: 0;
+    padding: 0;
+    color: #333;
+}
+
+.header, .footer, .container {
+    background-color: #e0f7fa; 
+    width: 100%;
+    padding: 20px;
+    box-sizing: border-box; /* Ensures padding doesn't affect width */
+}
+
+.header {
+    /* text-align: center; */
+    color: #ffffff;
+    background-color: #1ab761; /* Different color for header and footer */
+    height: 5em;
+}
+
+.header a {
+    color: #ffffff;
+    text-decoration: none;
+    font-weight: bold;
+    
+}
+
+.header span {
+    display: inline-block;
+    margin: 0 10px;
+}
+
+/* Container Styling */
+.container {
+    padding: 40px 20px;
+    text-align: center;
+}
+
+h2 {
+    color: #007bff;
+    margin-bottom: 20px;
+    font-size: 2rem;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+    text-align: left;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+ul li {
+    background-color: #ffffff;
+    padding: 15px;
+    border-radius: 6px;
+    margin-bottom: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+ul li strong {
+    color: #007bff;
+}
+
+/* Image Container Styling */
+.image-container {
+    position: relative;
+    max-width: 100%;
+    margin-bottom: 20px;
+}
+
+.image-container img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+}
+
+/* Enquiry Button Styling */
+.enquiry-button {
+    position: absolute;
+    bottom: 30%;
+    left: 10%;
+    background-color: #007bff;
+    color: #ffffff;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 16px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* .enquiry-button:hover {
+    background-color: #0056b3;
+} */
+
+/* Footer Styling */
+.footer {
+    text-align: center;
+    color: #ffffff;
+    background-color: #1ab761;
+}
+
+.footer a {
+    color: black;
+    margin: 0 10px;
+}
+
+.footer i {
+    font-size: 24px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    h2 {
+        font-size: 1.5rem;
+    }
+
+    ul li {
+        padding: 10px;
+        font-size: 0.9rem;
+    }
+
+    .enquiry-button {
+        bottom: 10px;
+        left: 10px;
+        padding: 8px 16px;
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    .header span {
+        display: block;
+        margin: 5px 0;
+    }
+
+    .footer a {
+        display: block;
+        margin: 10px 0;
+    }
+
+    .enquiry-button {
+        padding: 6px 12px;
+        font-size: 12px;
+        
+    }
+}
+
+/* for tab */
+.nav-tabs {
+    border-bottom: none; /* Remove the line under the tabs */
+}
+.nav-tabs .nav-link {
+    border-radius: 15px;
+}
+
+.tab-pane {
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 15px;
+    margin-top: -1px;
+}
+
+/* for carousel -- product  */
