@@ -12,12 +12,17 @@ urlpatterns = [
     path('logout/',views.logout_view, name='logout'),
     path('dashboard/',views.dashboard_view, name='dashboard'),
     path('mycart/',views.cart_details_view, name='mycart'),
-    path('addtocart/<int:id>',views.add_to_cart_view,name='add_to_cart'),
+    path('addtocart/<int:id>',views.add_to_cart_view,name='add_to_cart'), #by efq flow
+    path('product_added/<int:id>',views.put_in_cart_view,name='product_added'), #by normal flow
     path('create_order/',views.create_order,name='create_order'),
+    path('myorder/',views.myorder,name='myorder'),
+
     path('sqreject/<int:id>/', views.reject_sales_quote_view, name='reject_sales_quote'),
-    path('success/', views.success, name='success'),
+    # path('success/', views.success, name='success'),
     path('update_cart_details/', views.update_cart_details, name='update_cart_details'),
-    path('product/', views.create_products_details, name='product')
+    path('createproduct/', views.create_products_details, name='create_product'),
+    path('product/', views.product_details_view, name='product')
+
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

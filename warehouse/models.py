@@ -82,9 +82,7 @@ class Products(models.Model):
 class SalesQuoteDetails(models.Model):
     enquiry = models.ForeignKey(EnquiryDetails,on_delete=models.CASCADE)
     sales_quote_id = models.CharField(max_length=64, null = True)
-
     product_obj = models.ForeignKey(Products,on_delete=models.CASCADE, null=True)
-
     product_name = models.CharField(max_length=264, null = True)   #
     product_id = models.CharField(max_length = 128, null = True)   #
     qty= models.IntegerField(null = True)                           
@@ -94,22 +92,19 @@ class SalesQuoteDetails(models.Model):
     added_to_cart = models.BooleanField(default=False)
     sq_reject= models.BooleanField(default=False)
 
-    def __str__(self):
-        return self.product
 
 #for adding to cart items 
 class CartDetails(models.Model):
-    enquiry = models.ForeignKey(EnquiryDetails,on_delete=models.CASCADE)
+    enquiry = models.ForeignKey(EnquiryDetails,on_delete=models.CASCADE, null=True)
     user = models.ForeignKey(User,on_delete=models.CASCADE)
-    sq_details = models.ForeignKey(SalesQuoteDetails,on_delete=models.CASCADE)
-    time_period = models.CharField(choices=CATEGORY_CHOICES, max_length = 200, null = True, default="Other")
+    sq_details = models.ForeignKey(SalesQuoteDetails,on_delete=models.CASCADE, null=True)
+    product_obj = models.ForeignKey(Products,on_delete=models.CASCADE, null=True)
+    time_period = models.CharField(choices=CATEGORY_CHOICES, max_length = 200, null = True, default="1 Year")
     pricing = models.CharField(max_length=64, null = True)
-    qty= models.IntegerField( null = True)
+    qty = models.IntegerField(default=1, null=True)
     is_paid=models.BooleanField(default=False)
     total_amount=models.IntegerField( null = True)
 
-    def __str__(self):
-        return self.sq_details
 
 ## for connecting one single cart in a user profile 
 ##my Order

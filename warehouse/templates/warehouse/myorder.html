@@ -1,0 +1,174 @@
+{% extends 'layout/app.html' %}
+{% load static %}
+
+<html>
+        {% block content %}
+        <head>
+            <link rel = "stylesheet" type="text/css" href="{% static '/warehouse/css/dashboard.css' %}">
+
+            <style>
+                        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 20px auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+        .total {
+            font-weight: bold;
+            text-align: right;
+            padding: 10px;
+        }
+        tfoot tr {
+            background-color: #f9f9f9;
+        }
+        input[type="number"], select {
+        width: 100%;
+        padding: 8px;
+        box-sizing: border-box;
+    }
+        @media (max-width: 768px) {
+            table {
+                border: 0;
+            }
+            thead {
+                display: none;
+            }
+            tr {
+                display: block;
+                margin-bottom: 10px;
+            }
+            td {
+                display: block;
+                text-align: right;
+                position: relative;
+                padding-left: 50%;
+                border-bottom: 1px solid #ddd;
+                white-space: nowrap;
+            }
+            td::before {
+                content: attr(data-label);
+                position: absolute;
+                left: 0;
+                width: 45%;
+                padding-left: 10px;
+                font-weight: bold;
+                text-align: left;
+            }
+        }  
+        
+        </style>
+
+        </head>
+        <body>        
+             <!-- header start -->
+        <div class="header" style=" background-color: rgb(26, 183, 97); text-align: center; left: 0%; width: 100%; ">
+            <p><span style="margin-right: 60%; color: aliceblue; font-weight: bold;"><a href="{% url 'dashboard' %}" style="text-decoration: none; color: aliceblue;">RentalBox</a></span> 
+                <span>
+                    <a href="{% url 'mycart' %}"><i class="fas fa-shopping-cart" style="color: aliceblue;"></i></a>
+                    
+                </span> &nbsp;
+                <span >Login by 
+                    <span style="color: aliceblue; font-weight: bold;"> {{role}} </span>
+                </span>
+                <span> : {{ name }} <a href="{% url 'logout' %}" class="btn btn-dark">Logout</a></span></p>
+        </div>
+        <!-- header end -->
+        <div class="container">
+                <h1>My Order</h1>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Product Name</th>
+                            <th>Product Details</th>
+                            <th>Quantity</th>
+                            <th>Time Period</th>
+                            <th>Pricing Per Month</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for orders in order_objs %}
+                        
+                        {% for details in orders.cart.all %}
+                            
+                        <tr>    
+                            <!--  -->
+                            <td data-label="Product Name">
+
+                                {% if details.sq_details and details.sq_details.product_name %}
+                                    {{ details.sq_details.product_name }}
+                                {% elif details.product_obj and details.product_obj.name %}
+                                    {{ details.product_obj.name }}
+                                {% else %}
+                                    Product name not available
+                                {% endif %}
+                                </td>
+                                <td data-label="Product Details">
+                                    {% if details.sq_details and details.sq_details.product_details %}
+                                        {{ details.sq_details.product_details }}
+                                    {% elif details.product_obj and details.product_obj.description %}
+                                        {{ details.product_obj.description }}
+                                    {% else %}
+                                        Product details not available
+                                    {% endif %}
+                                </td>
+                            
+                            <td data-label="Quantity">
+                                <span class="qty">{{ details.qty }}</span>
+                            </td>
+                            <td data-label="Time Period">
+                                <span class="time_period">{{ details.time_period }}</span>
+                            </td>
+                            <td data-label="Pricing">
+                                <span class="pricing">{{ details.pricing }}</span>
+                            </td>
+                        </tr>
+                        {% endfor %}
+
+                        {% endfor %}
+                    </tbody>
+                    <!-- <tfoot>
+                        <tr>
+                            <td colspan="5" class="total">Total Amount</td>
+                            <td class="amount">{{ order_objs.total_amount }}</td>
+                        </tr>
+                    </tfoot> -->
+                </table>
+                
+        </form>
+        </div>
+        <!-- footer start -->
+        <div class="footer" style="background-color: rgb(26, 183, 97); text-align: center; left: 0%; width: 100%; bottom: 0%;  ">
+            <p>&copy shashiranjan<a href="https://www.linkedin.com/in/shashiranjan05/" ><i class="fa fa-linkedin-square" style="font-size:24px; color: black;"></i></a> &nbsp;<a href="https://github.com/shashiranjan05"><i class="fa fa-github-square" style="font-size:24px; color: black;" ></i></a>
+            </p>
+        </div>
+        <!-- footer end -->
+        
+        </body>
+    {% endblock %}
+</html>

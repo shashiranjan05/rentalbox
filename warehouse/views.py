@@ -18,19 +18,14 @@ from .forms import ProductForm
 # Create your views here.
 def index(request):
     user_obj=request.user
-    print("username -----------", user_obj)
     if request.user.is_authenticated:
-        # This means the user is logged in
-        print("-------------found")
         username = request.user.email
         name = username.split('@')[0]
         role = request.user.role
     else:
-        print("not found")
         name = 'AnonymousUser'
         role = ''
     context = {'name':name,'role':role}
-
     return render(request, 'warehouse/index.html', context)
 
 # def index(request):
@@ -39,7 +34,6 @@ def index(request):
 #     return render(request, 'polls/index.html', context)
 
 def requirement_details(request):
-
     return render (request, 'warehouse/reuirement.html')
 
 def create_order_id():
@@ -105,31 +99,7 @@ def sales_quote_view(request):
     return render(request, 'warehouse/sales_quote.html',{'all_data':all_data, 'name':name, 'role':role})
 
 
-# generate product details
-# def create_products_details(request):
-#     username= request.user.email
-#     user_name = username.split('@')[0]
-#     role=request.user.role
-
-#     if request.method == 'POST':
-#         sku = request.POST.get("sku")
-#         name = request.POST.get("name")
-#         categories = request.POST.get("categories")
-#         description = request.POST.get("description")
-#         discount_price = request.POST.get("discount_price")
-#         brand = request.POST.get("brand")
-#         price= request.POST.get("price")
-#         is_available= request.POST.get("is_available")
-#         uploaded_image = request.FILES.get('image')
-#         stock= request.POST.get("stock")
-#         tags= request.POST.get("tags")
-#         product_info = Products(sku= sku,name = name,uploaded_image=uploaded_image, categories = categories, stock = stock, tags = tags,
-#         description = description, discount_price = discount_price, brand=brand, price=price,is_available=is_available)
-#         product_info.save()
-
-#     context= {'name':user_name, 'role':role}       
-#     return render(request, 'warehouse/product.html',context)
-
+#create product details
 def create_products_details(request):
 
     if request.method == 'POST':
@@ -139,14 +109,34 @@ def create_products_details(request):
             return redirect('product')  # Redirect to a product list page or wherever you prefer
     else:
         form = ProductForm()
+    return render(request, 'warehouse/create_product.html', {'form': form})
 
-    return render(request, 'warehouse/product.html', {'form': form})
-
-
+def product_details_view(request):
+    username= request.user.email
+    name = username.split('@')[0]
+    role=request.user.role
+    product_obj = Products.objects.all()
+    context={'name':name, 'role':role, 'product_obj':product_obj}
+    return render(request, 'warehouse/product.html', context)
 
 def request_for_quote_view(request):
     data = EnquiryDetails.objects.filter(user=request.user)
     return data
+
+
+def myorder(request):
+    print("************enter in my order---------")
+    username= request.user.email
+    name = username.split('@')[0]
+    role=request.user.role
+    order_objs = MyOrder.objects.filter(user=request.user)
+
+    context={'name':name, 'role':role, 'order_objs':order_objs}
+
+    return render(request,'warehouse/myorder.html',context)
+
+
+
 
 #order created
 def create_order(request):
@@ -160,6 +150,7 @@ def create_order(request):
     for single_product in cart_details:
         amount.append(single_product.total_amount)
 
+    print("****************amunt", amount)
     total_amount=sum(amount)
     for cart_items in cart_details:
         cart_objs.cart.add(cart_items)
@@ -167,12 +158,16 @@ def create_order(request):
         cart_items.save()   
     cart_objs.total_amount= total_amount
     cart_objs.is_paid = True
+    print("***************", cart_objs)
+    print("***********amount****", total_amount)
     
     
     client = razorpay.Client(auth=(settings.KEY, settings.SECRET))
+    print("***************", client)
+    
     payment = client.order.create({'amount':total_amount*100, 'currency':'INR', 'payment_capture':1})
     context= { 'cart':cart_objs,'payment':payment,'cart_details':cart_details,'name':name, 'role':role,'total_amount':total_amount  }
-    
+    print("***************", context)
     cart_objs.razor_pay_order_id = payment['id']
     cart_objs.save()
 
@@ -200,15 +195,17 @@ def update_cart_details(request):
             if time_period=='1 Year':
                 total_amount = int(qty)*int(pricing)*12
             else:
-                total_amount = int(qty)*int(pricing)*int(timeing)
+                print("qty", qty, type(qty))
+                print("pricing", pricing, type(pricing))
+                print("timeing", timeing, type(timeing))
+                total_amount = int(qty)*int(float(pricing))*int(timeing)
             items.total_amount= total_amount
             items.save()
     print("items has been updated========================")
-
-
     return redirect('mycart')
 
-        
+
+
 #cart details only view  page /// on click of payment above route will trigger that will generate order id
 def cart_details_view(request):
 
@@ -225,7 +222,38 @@ def cart_details_view(request):
     context={'name':name, 'role':role, 'total_amount':total_amount,'cart_details':cart_details}
     return render(request,'warehouse/mycart.html',context)
 
-## add to cart view main logic for cart
+
+#create cart from normal image to addtocart normal flow
+
+def put_in_cart_view(request,id):
+    username= request.user.email
+    user_name = username.split('@')[0]
+    role=request.user.role
+
+    product_obj= Products.objects.get(id=id)
+    qty=1
+    time_period='1 Year'
+    pricing= product_obj.price
+    timeing=int(time_period.split(' ')[0])
+    if time_period=='1 Year':
+        total_amount = int(qty)*int(pricing)*12
+    else:
+        total_amount = int(qty)*int(pricing)*int(timeing)
+
+    
+    data = CartDetails(user=request.user,product_obj=product_obj, pricing=pricing,qty=qty,time_period=time_period,total_amount=total_amount)
+    data.save()
+
+    update_stock= product_obj.stock 
+    if update_stock ==0:
+        pass
+    else:
+        product_obj.stock = update_stock-1
+        product_obj.save()
+
+    return redirect('mycart')
+
+## add to cart view main logic for cart from rfq flow 
 from django.conf import settings
 
 def add_to_cart_view(request,id):
@@ -283,26 +311,6 @@ def register_view(request):
     return render(request, 'warehouse/register.html',{'form':form})
 
 
-#####
-
-# class CustomerSignUpView(CreateView):
-#     model = User
-#     form_class = CustomerSignUpForm
-#     template_name = 'warehouse/register.html'
-
-#     def get_context_data(self, **kwargs):
-#         kwargs['user_type'] = 'customer'
-#         return super().get_context_data(**kwargs)
-
-#     def form_valid(self, form):
-#         user = form.save()
-#         print("Hello3")
-
-#         login(self.request, user)
-#         print("Hello4")
-#         return redirect('dashboard')
-    
-####
 
 def login_view(request):
     if request.method == 'POST':
@@ -339,27 +347,6 @@ def dashboard_view(request):
     return render(request, 'dashboard.html',{'data':data,'sales_quote':sales_quote, 'name':name,'role':role})
 
 
-
-import logging
-
-logger = logging.getLogger(__name__)
-
-def success(request):
-    print("enter in success view")
-    order_id = request.GET.get('order_id')
-    
-    if not order_id:
-        return HttpResponse("Order ID is missing", status=400)
-    
-    try:
-        cart = Cart.objects.get(razor_pay_order_id=order_id)
-        cart.is_paid = True
-        cart.save()
-        logger.info(f"Payment successful for order_id: {order_id}")
-        return HttpResponse("Payment Successful")
-    except Cart.DoesNotExist:
-        logger.error(f"Cart with order_id {order_id} does not exist")
-        return HttpResponse("Cart not found", status=404)
 
 
 # def success(request):
