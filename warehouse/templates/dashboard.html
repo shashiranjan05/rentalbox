@@ -5,7 +5,6 @@
         {% block content %}
         <head>
             <link rel = "stylesheet" type="text/css" href="{% static '/warehouse/css/dashboard.css' %}">
-
             <style>
                  body {
             font-family: Arial, sans-serif;
@@ -111,6 +110,38 @@
                 white-space: nowrap;
             }
         }
+
+        /* cart counter  */
+        /* .cart-container {
+            position: relative;
+            display: inline-block;
+        }
+
+        .cart-icon {
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .cart-counter {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background-color: red;
+            color: white;
+            border-radius: 50%;
+            padding: 5px 10px;
+            font-size: 14px;
+        }
+
+        .add-to-cart-btn {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #04AA6D;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        } */
             </style>
         </head>
         <body>
@@ -120,10 +151,10 @@
              <!-- header start -->
         <div class="header" style=" background-color: rgb(26, 183, 97); text-align: center; left: 0%; width: 100%; ">
             <p><span style="margin-right: 60%; color: aliceblue; font-weight: bold;"><a href="{% url 'dashboard' %}" style="text-decoration: none;color: aliceblue;">RentalBox</a></span> 
-                <span>
-                    <a href="{% url 'mycart' %}"><i class="fas fa-shopping-cart" style="color: aliceblue;"></i></a>
-                    
-                </span> &nbsp;
+                
+                    <span class="cart-icon"><a href="{% url 'mycart' %}"><i class="fas fa-shopping-cart" style="color: aliceblue;"></i></a></span>
+                    <!-- <span id="cart-counter" class="cart-counter">0</span> -->
+
                 <span >Login by 
                     <span style="color: aliceblue; font-weight: bold;"> {{role}} </span>
                 </span>
@@ -189,9 +220,8 @@
                             <td>{{ products.time_period }}</td>
                             <td>{{ products.pricing }}</td>
                             <td class="actions">
-                                <button>
-                                    <a href="{% url 'add_to_cart' id=products.sales_quote_id %}">Add To Cart</a>
-                                </button>
+                                <a href="{% url 'add_to_cart' id=products.sales_quote_id %}" class="add-to-cart-btn" onclick="addToCart()">Add To Cart</a>
+                               
                                 <button class="btn-reject">
                                     <a href="{% url 'reject_sales_quote' id=products.sales_quote_id %}">Reject</a>
                                 </button>
@@ -210,6 +240,14 @@
             </p>
         </div>
         <!-- footer end -->
+         <script>
+            let cartCount = 0;
+            // Function to increment cart count
+            function addToCart() {
+                cartCount++;
+                document.getElementById('cart-counter').textContent = cartCount;
+            }
+         </script>
 
         </body>
     {% endblock %}

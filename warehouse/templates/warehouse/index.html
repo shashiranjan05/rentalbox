@@ -163,7 +163,8 @@
             {% if name != 'AnonymousUser' %}
                 <span>{{ name }} <a href="{% url 'logout' %}" class="btn btn-dark">Logout</a></span>
             {% else %}
-                <span ><a href="{% url 'login' %}">Login</a></span>
+                <span ><a href="{% url 'login' %}">SignIn</a>
+                <a href="{% url 'register' %}">/ SignUp</a></span>
             {% endif %}
         </p>
     </div>
