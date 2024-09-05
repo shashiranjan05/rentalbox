@@ -11,6 +11,7 @@ from django.views.generic import CreateView
 from .forms import  CustomUserCreationForm
 from django.conf import settings
 import razorpay
+from .forms import ProductForm
 
 # User = settings.AUTH_USER_MODEL
 
@@ -102,6 +103,46 @@ def sales_quote_view(request):
         # return HttpResponseRedirect(reverse('thank_you'))
         print("sales form details saved in database  .....")
     return render(request, 'warehouse/sales_quote.html',{'all_data':all_data, 'name':name, 'role':role})
+
+
+# generate product details
+# def create_products_details(request):
+#     username= request.user.email
+#     user_name = username.split('@')[0]
+#     role=request.user.role
+
+#     if request.method == 'POST':
+#         sku = request.POST.get("sku")
+#         name = request.POST.get("name")
+#         categories = request.POST.get("categories")
+#         description = request.POST.get("description")
+#         discount_price = request.POST.get("discount_price")
+#         brand = request.POST.get("brand")
+#         price= request.POST.get("price")
+#         is_available= request.POST.get("is_available")
+#         uploaded_image = request.FILES.get('image')
+#         stock= request.POST.get("stock")
+#         tags= request.POST.get("tags")
+#         product_info = Products(sku= sku,name = name,uploaded_image=uploaded_image, categories = categories, stock = stock, tags = tags,
+#         description = description, discount_price = discount_price, brand=brand, price=price,is_available=is_available)
+#         product_info.save()
+
+#     context= {'name':user_name, 'role':role}       
+#     return render(request, 'warehouse/product.html',context)
+
+def create_products_details(request):
+
+    if request.method == 'POST':
+        form = ProductForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('product')  # Redirect to a product list page or wherever you prefer
+    else:
+        form = ProductForm()
+
+    return render(request, 'warehouse/product.html', {'form': form})
+
+
 
 def request_for_quote_view(request):
     data = EnquiryDetails.objects.filter(user=request.user)

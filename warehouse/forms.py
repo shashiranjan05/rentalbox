@@ -5,7 +5,7 @@ from .models import User
 from django.db import transaction
 from django.forms import ModelForm
 from django.contrib.auth import get_user_model
-from .models import CustomUser
+from .models import CustomUser, Products
 
 User = get_user_model()
 
@@ -37,6 +37,10 @@ class UserRegisterForm(UserCreationForm):
 
 
 
+class ProductForm(forms.ModelForm):
+    class Meta:
+        model = Products
+        fields = ['name', 'sku','image','categories', 'description', 'discount_price','brand','price', 'is_available', 'stock', 'tags' ]
 
     # @transaction.atomic
     # def save(self):
