@@ -185,9 +185,11 @@
                                     <option value="12" {% if details.time_period == "12" %}selected{% endif %}>1 Year</option>
                                 </select>
                             </td>
-                            <td data-label="Pricing Per Month">
+                            <!-- <td data-label="Pricing Per Month" id="pricing_{{ details.id }}" name="pricing_{{ details.id }}">{{ details.pricing }}
                                 <input type="number" id="pricing_{{ details.id }}" name="pricing_{{ details.id }}" value="{{ details.pricing }}" class="form-control" onchange="updateAmount(this)">
-                            </td>
+                            </td> -->
+                            <td data-label="Pricing Per Month" class="pricing">{{ details.pricing }}</td>
+
 
 
                             <!--  -->
@@ -227,10 +229,10 @@
                 var row = element.closest('tr');
                 
                 var quantity = parseFloat(row.querySelector('input[name^="quantity"]').value) || 0;
-                var pricing = parseFloat(row.querySelector('input[name^="pricing"]').value) || 0;
+                // var pricing = parseFloat(row.querySelector('input[name^="pricing"]').value) || 0;
                 var time_period = parseFloat(row.querySelector('select[name^="time_period"]').value) || 0;
-                
-                // Calculate the total amount
+                var pricing = parseFloat(row.querySelector('.pricing').textContent) || 0;
+                               
                 var totalAmount = quantity * pricing * time_period;
                 
                 // Update the amount cell

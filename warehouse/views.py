@@ -81,8 +81,10 @@ def sales_quote_view(request):
     sales_quote_id = create_order_id() 
     if request.method == 'POST':
         # enquiry = all_data
-        enquiry_id = request.POST.get("enquiry_id")
+        idAndDetails = request.POST.get("enquiry_id")
+        print(idAndDetails)
         # sales_quote_id = request.POST.get("sales_quote_id")
+        enquiry_id = idAndDetails.split('@')[0]
         print("enquiry_id---- ", enquiry_id)
         enquiry=EnquiryDetails.objects.get(enquiry_id=enquiry_id)
         product_name = request.POST.get("product_name")
@@ -102,7 +104,6 @@ def sales_quote_view(request):
 
 
 #filter by appliances , furniture, electronics
-@login_required(login_url='/login/')
 def product_items_by_filter(request, category):
     user_obj=request.user
     if request.user.is_authenticated:
@@ -134,7 +135,6 @@ def create_products_details(request):
         form = ProductForm()
     return render(request, 'warehouse/create_product.html', {'form': form})
 
-@login_required(login_url='/login/')
 def product_details_view(request):
     user_obj=request.user
     if request.user.is_authenticated:
@@ -217,9 +217,9 @@ def update_cart_details(request):
         for items in cart_details:
             time_period = request.POST.get(f"time_period_{items.id}")
             qty= request.POST.get(f"quantity_{items.id}")
-            pricing= request.POST.get(f"pricing_{items.id}")
+            pricing= items.pricing
             items.time_period= time_period
-            items.pricing = pricing
+            # items.pricing = pricing
             items.qty= qty
             print(time_period, pricing, qty)
             timeing=int(items.time_period.split(' ')[0])
@@ -309,7 +309,7 @@ def add_to_cart_view(request,id):
     sales_quote.added_to_cart =True
     sales_quote.save()
 
-    return redirect('dashboard')
+    return redirect('mycart')
 
 @login_required(login_url='/login/')
 def reject_sales_quote_view(request,id):
