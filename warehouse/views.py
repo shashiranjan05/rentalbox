@@ -94,6 +94,7 @@ def sales_quote_view(request):
         sales_info = SalesQuoteDetails(enquiry= enquiry,product_name = product_name, product_id = product_id,
         product_details = product_details, time_period = time_period, pricing=pricing, qty=qty,sales_quote_id=sales_quote_id)
         sales_info.save()
+        return redirect('dashboard')
        
         # return HttpResponseRedirect(reverse('thank_you'))
         print("sales form details saved in database  .....")

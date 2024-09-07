@@ -110,6 +110,7 @@
     </style>
 </head>
 <body>
+
     <div class="container">
         <h1>Invoice</h1>
         <table>
@@ -162,9 +163,6 @@
         </table>
     </div>
 
-    <!-- <button style="margin-left: 40%;" id="rzp-button1">
-        <a href="" style="text-decoration: none; color: rgb(10, 109, 41);">Proceed To Payment</a>
-    </button> -->
     <div class="review-button"  id="rzp-button1">
         <a href="" class="proceed-button">Proceed to Checkout</a>
     </div>
@@ -174,15 +172,15 @@
     <script>
     var options = {
         "key": "rzp_test_6IfskZBWdJUFZa", // Enter the Key ID generated from the Dashboard
-        "amount": "{{payment.amount}}", // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+        "amount": "{{payment.amount}}", 
         "currency": "INR",
         "name": "Ecommerce Corp",
         "description": "Payment Transaction",
         "image": "https://example.com/your_logo",
-        "order_id": "{{payment.id}}", //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+        "order_id": "{{payment.id}}", //This is a sample Order ID. Pass the `id` obtained in the response 
         "handler": function (response){
             alert("Payment Success")
-            window.location.href = '{% url "dashboard" %}';  // Replace "myorder" with your actual URL name or URL
+            window.location.href = '{% url "myorder" %}';  
         },
         
         "theme": {
