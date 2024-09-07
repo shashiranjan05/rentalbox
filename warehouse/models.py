@@ -103,7 +103,7 @@ class CartDetails(models.Model):
     pricing = models.CharField(max_length=64, null = True)
     qty = models.IntegerField(default=1, null=True)
     is_paid=models.BooleanField(default=False)
-    total_amount=models.IntegerField( max_length=64,null = True)
+    total_amount=models.IntegerField(null = True)
 
 
 ## for connecting one single cart in a user profile 
