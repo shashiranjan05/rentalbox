@@ -26,7 +26,7 @@
         <span><a style="color: white; text-decoration: none;" href="{% url 'dashboard' %}">| Dashboard</a></span>
         <span>{{ name }} <a href="{% url 'logout' %}" class="btn btn-dark">Logout</a></span>
         {% else %}
-            <span><a href="{% url 'login' %}">SignIn</a> <a href="{% url 'register' %}">/ SignUp</a></span>
+            <span ><a href="{% url 'login' %}" >SignIn</a> <a href="{% url 'register' %}">/ SignUp</a></span>
         {% endif %}
     </p>
 </div>
@@ -37,18 +37,22 @@
         <div class="image-container">
             <img src="{% static 'warehouse/images/indexwall.png' %}" alt="Responsive Image">
             <a href="/enquiry" class="enquiry-button" style="text-decoration: none;">Enquiry</a>
+            
         </div>
 
         <!-- Tabs -->
         <div class="tabs">
             <ul class="nav nav-tabs" id="myTab" role="tablist">
                 <li class="nav-item" role="presentation">
-                    <a  href="{% url 'product_items' category='APPLIANCES' %}" role="tab" style="text-decoration: none;" aria-controls="appliances" aria-selected="true">Appliances</a>
+                    <a  href="{% url 'product' %}" role="tab" style="text-decoration: none;" aria-controls="appliances" aria-selected="true">All Products</a>
                 </li>
-                <li class="nav-item" role="presentation" style="margin-left: 25%;">
+                <li class="nav-item" role="presentation" style="margin-left: 15%;">
+                    <a  href="{% url 'product_items' category='APPLIANCES'  %}" role="tab" style="text-decoration: none;" aria-controls="appliances" aria-selected="true">Appliances</a>
+                </li>
+                <li class="nav-item" role="presentation" style="margin-left: 15%;">
                     <a  href="{% url 'product_items' category='ELECTRONICS' %}" role="tab" style="text-decoration: none;" aria-controls="electronics" aria-selected="false">Electronics</a>
                 </li>
-                <li class="nav-item" role="presentation" style="margin-left: 25%;">
+                <li class="nav-item" role="presentation" style="margin-left: 15%;">
                     <a  href="{% url 'product_items' category='FURNITURE' %}" role="tab" style="text-decoration: none;" aria-controls="furniture" aria-selected="false">Furniture</a>
                 </li>
             </ul>

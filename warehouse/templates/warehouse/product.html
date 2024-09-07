@@ -60,7 +60,7 @@
             <span><a style="color: white; text-decoration: none;" href="{% url 'dashboard' %}">| Dashboard</a></span>
             <span>{{ name }} <a href="{% url 'logout' %}" class="btn btn-dark">Logout</a></span>
             {% else %}
-                <span><a href="{% url 'login' %}">SignIn</a> <a href="{% url 'register' %}">/ SignUp</a></span>
+                <span ><a href="{% url 'login' %}" style="text-decoration: none;color: aliceblue;">SignIn</a> <a href="{% url 'register' %}" style="text-decoration: none;color: aliceblue;">/ SignUp</a></span>
             {% endif %}
         </p>
     </div>
