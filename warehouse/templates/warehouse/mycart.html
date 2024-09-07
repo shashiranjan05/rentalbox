@@ -140,7 +140,7 @@
                     <thead>
                         <tr>
                             <th>Product Name</th>
-                            <th>Product Details</th>
+                            <th>Details & Image</th>
                             <th>Quantity</th>
                             <th>Time Period</th>
                             <th>Pricing Per Month</th>
@@ -156,18 +156,20 @@
                             <td data-label="Product Name">
 
                         {% if details.sq_details and details.sq_details.product_name %}
-                            {{ details.sq_details.product_name }}
+                            {{ details.sq_details.product_name }} 
                         {% elif details.product_obj and details.product_obj.name %}
                             {{ details.product_obj.name }}
                         {% else %}
                             Product name not available
                         {% endif %}
                         </td>
-                        <td data-label="Product Details">
+                        <td data-label="Details & Image">
                             {% if details.sq_details and details.sq_details.product_details %}
                                 {{ details.sq_details.product_details }}
                             {% elif details.product_obj and details.product_obj.description %}
                                 {{ details.product_obj.description }}
+                        <img src="{{ details.product_obj.image.url }}" alt="Product Image" style="width:100px;height:auto;">
+
                             {% else %}
                                 Product details not available
                             {% endif %}
