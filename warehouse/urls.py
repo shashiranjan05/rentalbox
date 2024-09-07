@@ -4,6 +4,8 @@ from django.conf import settings
 
 from django.conf.urls.static import static
 
+# app_name = 'warehouse'
+
 urlpatterns = [
     path('enquiry/', views.enquiry_view, name='enquiry'),
     path('salesquote/', views.sales_quote_view, name='salesquote'),

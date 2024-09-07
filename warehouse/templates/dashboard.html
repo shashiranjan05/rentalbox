@@ -110,59 +110,27 @@
                 white-space: nowrap;
             }
         }
-
-        /* cart counter  */
-        /* .cart-container {
-            position: relative;
-            display: inline-block;
-        }
-
-        .cart-icon {
-            font-size: 24px;
-            cursor: pointer;
-        }
-
-        .cart-counter {
-            position: absolute;
-            top: -10px;
-            right: -10px;
-            background-color: red;
-            color: white;
-            border-radius: 50%;
-            padding: 5px 10px;
-            font-size: 14px;
-        }
-
-        .add-to-cart-btn {
-            margin-top: 20px;
-            padding: 10px 20px;
-            background-color: #04AA6D;
-            color: white;
-            border: none;
-            cursor: pointer;
-            border-radius: 5px;
-        } */
-            </style>
+        </style>
         </head>
+
         <body>
         
-
-        
-             <!-- header start -->
-        <div class="header" style=" background-color: rgb(26, 183, 97); text-align: center; left: 0%; width: 100%; ">
-            <p><span style="margin-right: 50%; color: aliceblue; font-weight: bold;"><a href="{% url 'dashboard' %}" style="text-decoration: none;color: aliceblue;">RentalBox</a></span> 
-                
-                    <span class="cart-icon"><a href="{% url 'mycart' %}"><i class="fas fa-shopping-cart" style="color: aliceblue;"></i></a></span>
-                    <!-- <span id="cart-counter" class="cart-counter">0</span> -->
-                    <span class="cart-icon" ><a style="color: white; text-decoration: none;" href="{% url 'myorder' %}">My Order</a></span>
-
-
-                <span >Login by 
-                    <span style="color: aliceblue; font-weight: bold;"> {{role}} </span>
-                </span>
-                <span> : {{ name }} <a href="{% url 'logout' %}" class="btn btn-dark">Logout</a></span></p>
-        </div>
-        <!-- header end -->
+    <!-- header start -->
+    <div class="header" style=" background-color: rgb(26, 183, 97); text-align: center; left: 0%; width: 100%; ">
+        <p>
+            <span style="margin-right: 50%; color: aliceblue; font-weight: bold;"><a href="{% url 'index' %}" style="text-decoration: none;color: aliceblue;">RentalBox</a></span> 
+            
+            {% if name != 'AnonymousUser' %}
+            <span class="cart-icon"><a href="{% url 'mycart' %}"><i class="fas fa-shopping-cart" style="color: aliceblue;"></i></a></span>
+            <span><a style="color: white; text-decoration: none;" href="{% url 'myorder' %}">My Order</a></span>
+            <span><a style="color: white; text-decoration: none;" href="{% url 'dashboard' %}">| Dashboard</a></span>
+            <span>{{ name }} <a href="{% url 'logout' %}" class="btn btn-dark">Logout</a></span>
+            {% else %}
+                <span><a href="{% url 'login' %}">SignIn</a> <a href="{% url 'register' %}">/ SignUp</a></span>
+            {% endif %}
+        </p>
+    </div>
+    <!-- header end -->
 
         <div class="container">
             <h3>Dashboard</h3>

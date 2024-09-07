@@ -118,21 +118,22 @@
 
         </head>
         <body>        
-             <!-- header start -->
-        <div class="header" style=" background-color: rgb(26, 183, 97); text-align: center; left: 0%; width: 100%; ">
-            <p><span style="margin-right: 50%; color: aliceblue; font-weight: bold;"><a href="{% url 'dashboard' %}" style="text-decoration: none; color: aliceblue;">RentalBox</a></span> 
-                <span>
-                    <a href="{% url 'mycart' %}"><i class="fas fa-shopping-cart" style="color: aliceblue;"></i></a>
-                    
-                </span> 
-                <span class="cart-icon" ><a style="color: white; text-decoration: none;" href="{% url 'myorder' %}">My Order</a></span>
-
-                <span >Login by 
-                    <span style="color: aliceblue; font-weight: bold;"> {{role}} </span>
-                </span>
-                <span> : {{ name }} <a href="{% url 'logout' %}" class="btn btn-dark">Logout</a></span></p>
-        </div>
-        <!-- header end -->
+         <!-- header start -->
+    <div class="header" style=" background-color: rgb(26, 183, 97); text-align: center; left: 0%; width: 100%; ">
+        <p>
+            <span style="margin-right: 50%; color: aliceblue; font-weight: bold;"><a href="{% url 'index' %}" style="text-decoration: none;color: aliceblue;">RentalBox</a></span> 
+            
+            {% if name != 'AnonymousUser' %}
+            <span class="cart-icon"><a href="{% url 'mycart' %}"><i class="fas fa-shopping-cart" style="color: aliceblue;"></i></a></span>
+            <span><a style="color: white; text-decoration: none;" href="{% url 'myorder' %}">My Order</a></span>
+            <span><a style="color: white; text-decoration: none;" href="{% url 'dashboard' %}">| Dashboard</a></span>
+            <span>{{ name }} <a href="{% url 'logout' %}" class="btn btn-dark">Logout</a></span>
+            {% else %}
+                <span><a href="{% url 'login' %}">SignIn</a> <a href="{% url 'register' %}">/ SignUp</a></span>
+            {% endif %}
+        </p>
+    </div>
+    <!-- header end -->
         <div class="container">
                 <h1>My Cart</h1>
                 <table>

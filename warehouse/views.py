@@ -72,6 +72,7 @@ def enquiry_view(request):
     return render(request, 'warehouse/enquiry.html',{'name':name, 'role':role})
 
 # generate sales quote
+@login_required(login_url='/login/')
 def sales_quote_view(request):
     username= request.user.email
     name = username.split('@')[0]
@@ -93,6 +94,7 @@ def sales_quote_view(request):
         sales_info = SalesQuoteDetails(enquiry= enquiry,product_name = product_name, product_id = product_id,
         product_details = product_details, time_period = time_period, pricing=pricing, qty=qty,sales_quote_id=sales_quote_id)
         sales_info.save()
+        return redirect('dashboard')
        
         # return HttpResponseRedirect(reverse('thank_you'))
         print("sales form details saved in database  .....")
@@ -100,6 +102,7 @@ def sales_quote_view(request):
 
 
 #filter by appliances , furniture, electronics
+@login_required(login_url='/login/')
 def product_items_by_filter(request, category):
     user_obj=request.user
     if request.user.is_authenticated:
@@ -119,6 +122,7 @@ def product_items_by_filter(request, category):
 
 
 #create product details
+@login_required(login_url='/login/')
 def create_products_details(request):
 
     if request.method == 'POST':
@@ -130,6 +134,7 @@ def create_products_details(request):
         form = ProductForm()
     return render(request, 'warehouse/create_product.html', {'form': form})
 
+@login_required(login_url='/login/')
 def product_details_view(request):
     user_obj=request.user
     if request.user.is_authenticated:
@@ -144,11 +149,12 @@ def product_details_view(request):
     context={'name':name, 'role':role, 'product_obj':product_obj}
     return render(request, 'warehouse/product.html', context)
 
+@login_required(login_url='/login/')
 def request_for_quote_view(request):
     data = EnquiryDetails.objects.filter(user=request.user)
     return data
 
-
+@login_required(login_url='/login/')
 def myorder(request):
     print("************enter in my order---------")
     username= request.user.email
@@ -164,6 +170,7 @@ def myorder(request):
 
 
 #order created
+@login_required(login_url='/login/')
 def create_order(request):
     print("************enter in create order---------")
     username= request.user.email
@@ -198,6 +205,7 @@ def create_order(request):
         return render(request,'warehouse/invoice.html',context)
     return redirect('mycart')
 
+@login_required(login_url='/login/')
 def update_cart_details(request):
     username= request.user.email
     name = username.split('@')[0]
@@ -230,6 +238,7 @@ def update_cart_details(request):
 
 
 #cart details only view  page /// on click of payment above route will trigger that will generate order id
+@login_required(login_url='/login/')
 def cart_details_view(request):
 
     username= request.user.email
@@ -247,7 +256,7 @@ def cart_details_view(request):
 
 
 #create cart from normal image to addtocart normal flow
-
+@login_required(login_url='/login/')
 def put_in_cart_view(request,id):
     username= request.user.email
     user_name = username.split('@')[0]
@@ -278,7 +287,7 @@ def put_in_cart_view(request,id):
 
 ## add to cart view main logic for cart from rfq flow 
 from django.conf import settings
-
+@login_required(login_url='/login/')
 def add_to_cart_view(request,id):
     user= request.user
     sales_quote= SalesQuoteDetails.objects.get(sales_quote_id=id, added_to_cart=False, sq_reject=False)
@@ -302,6 +311,7 @@ def add_to_cart_view(request,id):
 
     return redirect('dashboard')
 
+@login_required(login_url='/login/')
 def reject_sales_quote_view(request,id):
     sales_quote= SalesQuoteDetails.objects.filter(sales_quote_id=id, added_to_cart=False,sq_reject=False)
     print("sales quote-----", sales_quote)

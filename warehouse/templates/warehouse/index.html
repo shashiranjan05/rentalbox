@@ -15,18 +15,22 @@
     
 </head>
 <body>
-    <!-- Header -->
-    <div class="header">
-        <p>
-            <span style="margin-left: 8%;"><a href="">RentalBox</a></span> 
-            <span style="margin-left: 50%;"><strong>{{ role }}</strong></span>
-            {% if name != 'AnonymousUser' %}
-                <span>{{ name }} <a href="{% url 'logout' %}" class="btn btn-dark">Logout</a></span>
-            {% else %}
-                <span><a href="{% url 'login' %}">SignIn</a> <a href="{% url 'register' %}">/ SignUp</a></span>
-            {% endif %}
-        </p>
-    </div>
+   <!-- header start -->
+   <div class="header" style=" background-color: rgb(26, 183, 97); text-align: center; left: 0%; width: 100%; ">
+    <p>
+        <span style="margin-right: 50%; color: aliceblue; font-weight: bold;"><a href="{% url 'index' %}" style="text-decoration: none;color: aliceblue;">RentalBox</a></span> 
+        
+        {% if name != 'AnonymousUser' %}
+        <span class="cart-icon"><a href="{% url 'mycart' %}"><i class="fas fa-shopping-cart" style="color: aliceblue;"></i></a></span>
+        <span><a style="color: white; text-decoration: none;" href="{% url 'myorder' %}">My Order</a></span>
+        <span><a style="color: white; text-decoration: none;" href="{% url 'dashboard' %}">| Dashboard</a></span>
+        <span>{{ name }} <a href="{% url 'logout' %}" class="btn btn-dark">Logout</a></span>
+        {% else %}
+            <span><a href="{% url 'login' %}">SignIn</a> <a href="{% url 'register' %}">/ SignUp</a></span>
+        {% endif %}
+    </p>
+</div>
+<!-- header end -->
 
     <!-- Content Container -->
     <div class="container">
@@ -39,18 +43,18 @@
         <div class="tabs">
             <ul class="nav nav-tabs" id="myTab" role="tablist">
                 <li class="nav-item" role="presentation">
-                    <a  href="{% url 'product_items' category='APPLIANCES' %}" role="tab" aria-controls="appliances" aria-selected="true">Appliances</a>
+                    <a  href="{% url 'product_items' category='APPLIANCES' %}" role="tab" style="text-decoration: none;" aria-controls="appliances" aria-selected="true">Appliances</a>
                 </li>
-                <li class="nav-item" role="presentation" style="margin-left: 20%;">
-                    <a  href="{% url 'product_items' category='ELECTRONICS' %}" role="tab" aria-controls="electronics" aria-selected="false">Electronics</a>
+                <li class="nav-item" role="presentation" style="margin-left: 25%;">
+                    <a  href="{% url 'product_items' category='ELECTRONICS' %}" role="tab" style="text-decoration: none;" aria-controls="electronics" aria-selected="false">Electronics</a>
                 </li>
-                <li class="nav-item" role="presentation" style="margin-left: 20%;">
-                    <a  href="{% url 'product_items' category='FURNITURE' %}" role="tab" aria-controls="furniture" aria-selected="false">Furniture</a>
+                <li class="nav-item" role="presentation" style="margin-left: 25%;">
+                    <a  href="{% url 'product_items' category='FURNITURE' %}" role="tab" style="text-decoration: none;" aria-controls="furniture" aria-selected="false">Furniture</a>
                 </li>
             </ul>
         </div>
 
-        
+        &nbsp;
 
         <h2>Why Choose Us</h2>
         <ul>
