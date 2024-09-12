@@ -21,8 +21,8 @@ from warehouse import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    # path('', views.index, name='index'),
-    path('index/', views.index, name='index'),
+    path('', views.index, name='index'),
+    # path('index/', views.index, name='index'),
     path('', include('warehouse.urls')),
     # path('auth/', include('warehouse.urls')),
     path('enquiry/', views.enquiry_view, name='enquiry form'),
